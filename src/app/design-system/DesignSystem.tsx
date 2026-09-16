@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Copy,
   Check,
@@ -378,7 +378,7 @@ function useActiveSection(ids: string[]) {
 // ============================================================
 function SectionHeader({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -391,7 +391,7 @@ function SectionHeader({ eyebrow, title, description }: { eyebrow: string; title
       </span>
       <h2 className="text-h1 text-text-primary">{title}</h2>
       <p className="text-body-description text-text-secondary max-w-3xl">{description}</p>
-    </m.div>
+    </motion.div>
   );
 }
 
@@ -435,7 +435,7 @@ function ColorSwatch({ color, family }: { color: ColorItem; family: string }) {
   };
 
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
@@ -447,7 +447,7 @@ function ColorSwatch({ color, family }: { color: ColorItem; family: string }) {
         className="w-full text-left focus:outline-none focus:ring-2 focus:ring-brand-secondary/50 rounded-xl"
         aria-label={`Copiar cor ${color.hex}`}
       >
-        <m.div
+        <motion.div
           whileHover={{ scale: 1.04, y: -4 }}
           whileTap={{ scale: 0.98 }}
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
@@ -464,14 +464,14 @@ function ColorSwatch({ color, family }: { color: ColorItem; family: string }) {
               <Copy className="w-5 h-5" style={{ color: contrast }} />
             )}
           </div>
-        </m.div>
+        </motion.div>
       </button>
 
       <div className="mt-3 space-y-1">
         <span className="block text-[11px] font-medium text-text-primary truncate text-center">{family}-{color.step}</span>
         <CopyBadge value={color.hex} />
       </div>
-    </m.div>
+    </motion.div>
   );
 }
 
@@ -490,7 +490,7 @@ function SemanticColorCard({ item }: { item: typeof semanticColors[0] }) {
   };
 
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -502,7 +502,7 @@ function SemanticColorCard({ item }: { item: typeof semanticColors[0] }) {
         <div className="absolute inset-0" style={{ backgroundColor: item.hex }} />
         <AnimatePresence mode="wait">
           {copied ? (
-            <m.div
+            <motion.div
               key="check"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -511,9 +511,9 @@ function SemanticColorCard({ item }: { item: typeof semanticColors[0] }) {
               style={{ color: contrast, backgroundColor: contrast === "#FFFFFF" ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.2)" }}
             >
               <Check className="w-3.5 h-3.5" /> Copiado
-            </m.div>
+            </motion.div>
           ) : (
-            <m.div
+            <motion.div
               key="copy"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -522,7 +522,7 @@ function SemanticColorCard({ item }: { item: typeof semanticColors[0] }) {
               style={{ color: contrast, backgroundColor: contrast === "#FFFFFF" ? "rgba(0,0,0,0.2)" : "rgba(255,255,255,0.2)" }}
             >
               <Copy className="w-3.5 h-3.5" /> Copiar HEX
-            </m.div>
+            </motion.div>
           )}
         </AnimatePresence>
       </button>
@@ -534,13 +534,13 @@ function SemanticColorCard({ item }: { item: typeof semanticColors[0] }) {
         <code className="text-[10px] font-mono text-text-muted block">{item.token}</code>
         <p className="text-[11px] text-text-secondary leading-relaxed">{item.usage}</p>
       </div>
-    </m.div>
+    </motion.div>
   );
 }
 
 function TypeSpecCard({ token, index }: { token: TypeToken; index: number }) {
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -604,14 +604,14 @@ function TypeSpecCard({ token, index }: { token: TypeToken; index: number }) {
         {token.mobile.letterSpacing && <span>Mobile Letter: {token.mobile.letterSpacing}</span>}
         {token.desktop.letterSpacing && <span>Desktop Letter: {token.desktop.letterSpacing}</span>}
       </div>
-    </m.div>
+    </motion.div>
   );
 }
 
 function SpacingCard({ item, index }: { item: SpacingToken; index: number }) {
   const widthClass = index < 5 ? `w-${index + 1}` : `w-${[6, 8, 12, 16, 20, 24][index - 5]}`;
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -631,7 +631,7 @@ function SpacingCard({ item, index }: { item: SpacingToken; index: number }) {
         </p>
         <p className="text-[11px] text-text-secondary">{item.usage}</p>
       </div>
-    </m.div>
+    </motion.div>
   );
 }
 
@@ -646,7 +646,7 @@ function ShadowCard({ shadow }: { shadow: ShadowToken }) {
       : "shadow-btn-primary-hover";
 
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -660,13 +660,13 @@ function ShadowCard({ shadow }: { shadow: ShadowToken }) {
         <code className="text-[10px] font-mono text-text-muted block">{shadow.token}</code>
         <p className="text-[11px] text-text-secondary">{shadow.usage}</p>
       </div>
-    </m.div>
+    </motion.div>
   );
 }
 
 function RadiusCard({ item }: { item: RadiusToken }) {
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -685,14 +685,14 @@ function RadiusCard({ item }: { item: RadiusToken }) {
         <code className="text-[10px] font-mono text-text-muted block">{item.token}</code>
         <p className="text-[11px] text-text-secondary">{item.usage}</p>
       </div>
-    </m.div>
+    </motion.div>
   );
 }
 
 function ComponentShowcase() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <m.div
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -712,9 +712,9 @@ function ComponentShowcase() {
   Botão Principal
 </button>`}</code>
         </pre>
-      </m.div>
+      </motion.div>
 
-      <m.div
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -734,9 +734,9 @@ function ComponentShowcase() {
         <pre className="bg-text-primary text-surface-default p-4 rounded-xl text-[11px] font-mono overflow-x-auto">
           <code>{`<input className="w-full h-12 bg-surface-subdued border border-border-default rounded-input px-4 text-text-primary focus:ring-2 focus:ring-border-focus/20" />`}</code>
         </pre>
-      </m.div>
+      </motion.div>
 
-      <m.div
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -758,9 +758,9 @@ function ComponentShowcase() {
   <h4 className="text-heading-subtitle">Plano Pro</h4>
 </div>`}</code>
         </pre>
-      </m.div>
+      </motion.div>
 
-      <m.div
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -781,14 +781,14 @@ function ComponentShowcase() {
   Badge Status
 </span>`}</code>
         </pre>
-      </m.div>
+      </motion.div>
     </div>
   );
 }
 
 function UsageRuleCard({ rule, index }: { rule: UsageRule; index: number }) {
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -812,7 +812,7 @@ function UsageRuleCard({ rule, index }: { rule: UsageRule; index: number }) {
           <p className="text-body-base text-text-secondary">{rule.dont}</p>
         </div>
       </div>
-    </m.div>
+    </motion.div>
   );
 }
 
@@ -857,7 +857,7 @@ function Hero() {
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-brand-secondary/20 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/3" />
       </div>
       <div className="relative px-8 py-16 md:px-16 md:py-24">
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -888,9 +888,9 @@ function Hero() {
               <Type className="w-4 h-4" /> Ver Tipografia
             </a>
           </div>
-        </m.div>
+        </motion.div>
 
-        <m.div
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
@@ -902,7 +902,7 @@ function Hero() {
             { label: "Tipos", value: "7" },
             { label: "Componentes", value: "4" },
           ].map((stat, i) => (
-            <m.div
+            <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -911,9 +911,9 @@ function Hero() {
             >
               <div className="text-heading-section text-brand-secondary">{stat.value}</div>
               <div className="text-body-label text-text-muted">{stat.label}</div>
-            </m.div>
+            </motion.div>
           ))}
-        </m.div>
+        </motion.div>
       </div>
     </section>
   );
@@ -1065,7 +1065,7 @@ export default function DesignSystem() {
             </section>
 
             {/* FOOTER CTA */}
-            <m.div
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -1082,7 +1082,7 @@ export default function DesignSystem() {
               >
                 <Sparkles className="w-4 h-4" /> Voltar ao topo
               </a>
-            </m.div>
+            </motion.div>
           </main>
         </div>
       </div>

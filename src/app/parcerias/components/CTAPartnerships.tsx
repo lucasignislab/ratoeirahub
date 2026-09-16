@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useMemo } from "react";
 
@@ -17,7 +17,7 @@ export default function CTAPartnerships() {
     >
       <div className="max-w-4xl 2xl:max-w-[90rem] 4xl:max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 4xl:px-20 relative z-10">
         {/* Seção 4 — CTA */}
-        <m.div
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -33,11 +33,11 @@ export default function CTAPartnerships() {
           <p className="text-gray-400 text-base sm:text-lg mb-0 max-w-xl 2xl:max-w-[50rem] 4xl:max-w-[60rem] mx-auto relative z-10 ">
             {ctaDescription}
           </p>
-        </m.div>
+        </motion.div>
 
         {/* Seção 5 — Formulário (oculto temporariamente) */}
         {false && (
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -66,7 +66,7 @@ export default function CTAPartnerships() {
                 style={{ border: "none", overflow: "hidden" }}
               />
             </div>
-          </m.div>
+          </motion.div>
         )}
       </div>
     </section>

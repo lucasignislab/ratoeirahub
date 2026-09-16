@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 
 function FloatingPaths({ position }: { position: number }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -25,7 +25,7 @@ function FloatingPaths({ position }: { position: number }) {
       >
         <title>Background Paths</title>
         {paths.map((path) => (
-          <m.path
+          <motion.path
             key={path.id}
             d={path.d}
             stroke="url(#benefits-gradient)"
@@ -38,7 +38,7 @@ function FloatingPaths({ position }: { position: number }) {
               pathOffset: [0, 1, 0],
             }}
             transition={{
-              duration: 20 + Math.random() * 10,
+              duration: 20 + (path.id % 10),
               repeat: Number.POSITIVE_INFINITY,
               ease: "linear",
             }}

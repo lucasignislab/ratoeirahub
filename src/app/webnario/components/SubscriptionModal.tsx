@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -212,7 +212,7 @@ export default function SubscriptionModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <m.div
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -221,7 +221,7 @@ export default function SubscriptionModal({
           onClick={handleBackdropClick}
           role="presentation"
         >
-          <m.div
+          <motion.div
             initial={{ scale: 0.95, opacity: 0, y: 16 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 16 }}
@@ -386,8 +386,8 @@ export default function SubscriptionModal({
                 para a assinatura.
               </p>
             </form>
-          </m.div>
-        </m.div>
+          </motion.div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

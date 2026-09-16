@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useMemo } from "react";
 
@@ -27,7 +27,7 @@ export default function GalleryAbout() {
     <section className="py-16 md:py-32 bg-[#050505]">
       <div className="max-w-7xl 2xl:max-w-[90rem] 4xl:max-w-[120rem] 5xl:max-w-[140rem] 6xl:max-w-[160rem] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 4xl:px-20 5xl:px-28 6xl:px-36">
 
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -38,12 +38,12 @@ export default function GalleryAbout() {
           <p className="mt-4 text-base sm:text-xl text-gray-400 max-w-2xl 2xl:max-w-[50rem] 4xl:max-w-[70rem] mx-auto px-4 sm:px-0 hyphens-none">
             {headerSubtitle}
           </p>
-        </m.div>
+        </motion.div>
 
         {/* Masonry-like Grid */}
         <div className="columns-2 md:columns-3 gap-3 sm:gap-4 md:gap-6">
           {galleryItems.map((item, index) => (
-            <m.div
+            <motion.div
               key={item.id}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -77,7 +77,7 @@ export default function GalleryAbout() {
                   {item.title}
                 </h3>
               </div>
-            </m.div>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -12,7 +12,7 @@ export default function CTAPages() {
   return (
     <section className="flex items-center justify-center min-h-[auto] md:min-h-[clamp(600px,70vh,900px)] py-16 md:py-24 bg-white">
       <div className="max-w-4xl 2xl:max-w-[90rem] 4xl:max-w-[90rem] 5xl:max-w-[110rem] 6xl:max-w-[130rem] mx-auto px-4 2xl:px-12 4xl:px-20 5xl:px-28 6xl:px-36 relative z-20 text-center w-full">
-        <m.div
+        <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
@@ -29,7 +29,7 @@ export default function CTAPages() {
             {t("header.signIn")}
             <ArrowRight className="w-6 h-6" />
           </Link>
-        </m.div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,7 +1,7 @@
 // Translation file - Complete translations for pt-BR, en, es
 // Usage: const { t } = useLanguage(); t("key.name")
 
-const translations = {
+const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
   "pt-BR": {
     // Navigation
     "nav.home": "Início",

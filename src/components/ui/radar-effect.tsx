@@ -1,5 +1,5 @@
 "use client";
-import { m, useAnimationFrame, useMotionValue, useTransform, MotionValue, HTMLMotionProps } from "framer-motion";
+import { motion, useAnimationFrame, useMotionValue, useTransform, MotionValue, HTMLMotionProps } from "motion/react";
 import { twMerge } from "tailwind-merge";
 import React, { useRef, useState } from "react";
 
@@ -19,7 +19,7 @@ export const Circle = ({ className, children, idx, angle, ...rest }: HTMLMotionP
   );
 
   return (
-    <m.div
+    <motion.div
       {...rest}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -46,7 +46,7 @@ export const Radar = ({ className, angle }: { className?: string; angle: MotionV
       )}
     >
       {/* Rotating sweep line */}
-      <m.div
+      <motion.div
         style={{ 
           transformOrigin: "right center",
           rotate: angle 
@@ -54,7 +54,7 @@ export const Radar = ({ className, angle }: { className?: string; angle: MotionV
         className="absolute right-1/2 top-1/2 z-40 flex h-[5px] w-[400px] items-end justify-center overflow-hidden bg-transparent"
       >
         <div className="relative z-40 h-[1px] w-full bg-gradient-to-r from-transparent via-[#E6A600] to-transparent" />
-      </m.div>
+      </motion.div>
       {/* Concentric circles */}
       {circles.map((_, idx) => (
         <Circle
@@ -121,14 +121,14 @@ export const IconContainer = ({
   const shadowOpacity = useTransform(glowOpacity, [0, 1], [0.1, 0.8]);
 
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.2, delay: delay ?? 0 }}
       className="relative z-50 flex flex-col items-center justify-center space-y-2"
       style={{ scale }}
     >
-      <m.div 
+      <motion.div 
         className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#111111]"
         style={{ 
           borderWidth: 1,
@@ -137,11 +137,11 @@ export const IconContainer = ({
           boxShadow: useTransform(shadowOpacity, (v) => `inset 0 0 20px rgba(230,166,0,${v}), 0 0 20px rgba(230,166,0,${v})`)
         }}
       >
-        <m.div style={{ color: useTransform(glowOpacity, [0, 1], ["#E6A600", "#FFD700"]) }}>
+        <motion.div style={{ color: useTransform(glowOpacity, [0, 1], ["#E6A600", "#FFD700"]) }}>
           {icon}
-        </m.div>
-      </m.div>
-      <m.div 
+        </motion.div>
+      </motion.div>
+      <motion.div 
         className="hidden rounded-md px-2 py-1 md:block bg-black/40 backdrop-blur-sm"
         style={{
           borderWidth: 1,
@@ -150,15 +150,15 @@ export const IconContainer = ({
           boxShadow: useTransform(shadowOpacity, (v) => `0 0 10px rgba(230,166,0,${v})`)
         }}
       >
-        <m.div 
+        <motion.div 
           className="text-center text-[10px] font-bold uppercase tracking-widest"
           style={{
             color: useTransform(glowOpacity, [0, 1], ["rgb(156, 163, 175)", "rgb(255, 255, 255)"])
           }}
         >
           {text || "Tracking"}
-        </m.div>
-      </m.div>
-    </m.div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };

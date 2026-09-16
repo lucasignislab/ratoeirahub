@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { Zap, Shield, MessageCircle, BarChart3, Globe, Smartphone, Bell, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,14 +14,14 @@ export const AdsSkeleton = () => {
   };
 
   return (
-    <m.div
+    <motion.div
       initial="initial"
       animate="animate"
       className="flex flex-1 w-full h-full min-h-[6rem] bg-linear-to-br from-yellow-50 to-white dark:from-neutral-900 dark:to-neutral-800 flex-col space-y-2 p-4"
     >
       {[40, 60, 80].map((w, i) => (
         <div key={i} className="h-2 w-full bg-neutral-100 dark:bg-neutral-800 rounded-full overflow-hidden">
-          <m.div
+          <motion.div
             variants={variants}
             style={{ width: `${w}%` }}
             className="h-full bg-linear-to-r from-yellow-400 to-[#E6A600]"
@@ -37,32 +37,32 @@ export const AdsSkeleton = () => {
           <div className="h-1.5 w-12 bg-neutral-100 dark:bg-neutral-800 rounded" />
         </div>
       </div>
-    </m.div>
+    </motion.div>
   );
 };
 
 export const PagesSkeleton = () => {
   return (
-    <m.div className="flex flex-1 w-full h-full min-h-[6rem] bg-orange-50 dark:bg-neutral-900 rounded-xl p-4 gap-4 overflow-hidden">
+    <motion.div className="flex flex-1 w-full h-full min-h-[6rem] bg-orange-50 dark:bg-neutral-900 rounded-xl p-4 gap-4 overflow-hidden">
       <div className="w-1/3 h-full border-r border-orange-100 dark:border-neutral-800 flex flex-col gap-2 pr-2">
         <div className="h-2 w-full bg-orange-200 dark:bg-neutral-800 rounded-full" />
         <div className="h-2 w-2/3 bg-orange-100 dark:bg-neutral-700 rounded-full" />
         <div className="h-10 w-full bg-orange-500/20 rounded-lg border border-orange-500/30" />
       </div>
       <div className="flex-1 space-y-4">
-        <m.div
+        <motion.div
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 4, repeat: Infinity }}
           className="h-24 w-full bg-linear-to-br from-orange-400 to-orange-600 rounded-xl shadow-lg shadow-orange-500/20 flex items-center justify-center"
         >
           <Zap className="w-8 h-8 text-white" />
-        </m.div>
+        </motion.div>
         <div className="grid grid-cols-2 gap-2">
           <div className="h-8 bg-white dark:bg-neutral-800 rounded-lg shadow-sm" />
           <div className="h-8 bg-white dark:bg-neutral-800 rounded-lg shadow-sm" />
         </div>
       </div>
-    </m.div>
+    </motion.div>
   );
 };
 
@@ -72,7 +72,7 @@ export const IntegrationsSkeleton = () => {
     <div className="flex flex-1 w-full h-full min-h-[6rem] bg-neutral-50 dark:bg-neutral-900 items-center justify-center p-4">
       <div className="grid grid-cols-3 gap-4">
         {logos.map((Icon, i) => (
-          <m.div
+          <motion.div
             key={i}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -86,7 +86,7 @@ export const IntegrationsSkeleton = () => {
             className="w-10 h-10 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-700 flex items-center justify-center shadow-sm"
           >
             <Icon className="w-5 h-5 text-neutral-400 group-hover:text-[#E6A600] transition-colors" />
-          </m.div>
+          </motion.div>
         ))}
       </div>
     </div>
@@ -95,8 +95,8 @@ export const IntegrationsSkeleton = () => {
 
 export const NotificationSkeleton = () => {
   return (
-    <m.div className="flex flex-1 w-full h-full min-h-[6rem] bg-linear-to-br from-blue-50 to-white dark:from-neutral-900 dark:to-neutral-800 flex-col p-4 relative overflow-hidden">
-      <m.div
+    <motion.div className="flex flex-1 w-full h-full min-h-[6rem] bg-linear-to-br from-blue-50 to-white dark:from-neutral-900 dark:to-neutral-800 flex-col p-4 relative overflow-hidden">
+      <motion.div
         animate={{ y: [0, -40, 0] }}
         transition={{ duration: 3, repeat: Infinity }}
         className="space-y-3"
@@ -112,16 +112,16 @@ export const NotificationSkeleton = () => {
             </div>
           </div>
         ))}
-      </m.div>
+      </motion.div>
       <div className="absolute inset-0 bg-linear-to-t from-white/90 dark:from-neutral-900/90 to-transparent pointer-events-none" />
-    </m.div>
+    </motion.div>
   );
 };
 
 export const SecuritySkeleton = () => {
   return (
     <div className="flex flex-1 w-full h-full min-h-[6rem] bg-emerald-50 dark:bg-neutral-900 items-center justify-center p-4">
-      <m.div
+      <motion.div
         animate={{
           rotateY: [0, 180, 360],
           scale: [1, 1.1, 1],
@@ -130,12 +130,12 @@ export const SecuritySkeleton = () => {
         className="w-20 h-20 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 flex items-center justify-center relative"
       >
         <Shield className="w-10 h-10 text-emerald-600" />
-        <m.div
+        <motion.div
           animate={{ opacity: [0, 1, 0], scale: [1, 1.5, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute inset-0 rounded-full border border-emerald-500"
         />
-      </m.div>
+      </motion.div>
     </div>
   );
 };

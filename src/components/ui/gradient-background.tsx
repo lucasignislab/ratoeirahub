@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 type GradientBackgroundProps = React.ComponentProps<"div"> & {
@@ -39,7 +39,7 @@ export function GradientBackground({
   return (
     <div className={cn("w-full relative overflow-hidden", className)}>
       {/* Animated gradient background */}
-      <m.div
+      <motion.div
         className="absolute inset-0"
         style={{ background: gradients[0] }}
         animate={{ background: gradients }}

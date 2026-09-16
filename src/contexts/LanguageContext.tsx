@@ -8,6 +8,7 @@ import {
   useCallback,
   ReactNode,
 } from "react";
+import translations from "@/lib/translations";
 
 export type Language = "pt-BR" | "en" | "es";
 
@@ -25,29 +26,13 @@ const STORAGE_KEY = "ratoeira-hub-language";
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>("pt-BR");
-  const [translations, setTranslations] = useState<Record<string, string>>({});
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load translations based on language
-  useEffect(() => {
-    async function loadTranslations() {
-      const lang = language;
-      try {
-        const modules = await import("@/lib/translations");
-        setTranslations(modules.default[lang] || modules.default["pt-BR"]);
-      } catch {
-        setTranslations({});
-      }
-      setIsLoaded(true);
-    }
-    loadTranslations();
-  }, [language]);
 
   // Load saved language from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY) as Language | null;
     if (saved && ["pt-BR", "en", "es"].includes(saved)) {
-      setLanguageState(saved);
+      const timer = window.setTimeout(() => setLanguageState(saved), 0);
+      return () => window.clearTimeout(timer);
     }
   }, []);
 
@@ -58,10 +43,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const t = useCallback(
     (key: string): string => {
-      if (!isLoaded) return key;
-      return translations[key] || key;
+      return translations[language][key] || translations["pt-BR"][key] || key;
     },
-    [translations, isLoaded],
+    [language],
   );
 
   return (

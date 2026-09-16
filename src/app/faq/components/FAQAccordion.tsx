@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -51,7 +51,7 @@ export default function FAQAccordion() {
       {faqs.map((faq, index) => {
         const isOpen = openIndex === index;
         return (
-          <m.div
+          <motion.div
             key={index}
             initial={false}
             animate={{ backgroundColor: isOpen ? "rgba(255, 255, 255, 0.05)" : "rgba(17, 17, 17, 1)" }}
@@ -65,7 +65,7 @@ export default function FAQAccordion() {
               className="w-full flex min-h-12 items-center justify-between p-6 text-left"
             >
               <span className="text-lg font-bold text-white pr-8">{faq.question}</span>
-              <m.div
+              <motion.div
                 animate={{ rotate: isOpen ? 180 : 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className={cn(
@@ -74,11 +74,11 @@ export default function FAQAccordion() {
                 )}
               >
                 <ChevronDown className="w-5 h-5" />
-              </m.div>
+              </motion.div>
             </button>
             <AnimatePresence initial={false}>
               {isOpen && (
-                <m.div
+                <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
@@ -87,10 +87,10 @@ export default function FAQAccordion() {
                   <div className="px-6 pb-6 text-base text-gray-400 leading-relaxed">
                     {faq.answer}
                   </div>
-                </m.div>
+                </motion.div>
               )}
             </AnimatePresence>
-          </m.div>
+          </motion.div>
         );
       })}
     </div>

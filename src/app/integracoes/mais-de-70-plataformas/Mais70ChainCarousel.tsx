@@ -114,6 +114,42 @@ const LOGO_FILES = [
 
 const SEARCH_ONLY_ITEMS: ChainItem[] = [
   {
+    id: "search-corvex",
+    name: "Corvex",
+    icon: TrendingUp,
+    logo: "/logos/search-only/corvex.svg",
+  },
+  {
+    id: "search-goatpay",
+    name: "GoatPay",
+    icon: TrendingUp,
+    logo: "/logos/search-only/goatpay.svg",
+  },
+  {
+    id: "search-hubla",
+    name: "Hubla",
+    icon: TrendingUp,
+    logo: "/logos/search-only/hubla.ico",
+  },
+  {
+    id: "search-klivo",
+    name: "Klivo",
+    icon: TrendingUp,
+    logo: "/logos/search-only/klivo.ico",
+  },
+  {
+    id: "search-lastlink",
+    name: "LastLink",
+    icon: TrendingUp,
+    logo: "/logos/search-only/lastlink.ico",
+  },
+  {
+    id: "search-salduu",
+    name: "Salduu",
+    icon: TrendingUp,
+    logo: "/logos/search-only/salduu.ico",
+  },
+  {
     id: "search-tiktok-ads",
     name: "TikTok Ads",
     icon: TrendingUp,
@@ -124,6 +160,18 @@ const SEARCH_ONLY_ITEMS: ChainItem[] = [
     name: "MGID",
     icon: TrendingUp,
     logo: "/logos/mgid.svg",
+  },
+  {
+    id: "search-tribopay",
+    name: "TriboPay",
+    icon: TrendingUp,
+    logo: "/logos/search-only/tribopay.ico",
+  },
+  {
+    id: "search-zippy",
+    name: "Zippy",
+    icon: TrendingUp,
+    logo: "/logos/search-only/zippy.svg",
   },
 ];
 

@@ -3,15 +3,6 @@
     <path fill="#00c" d="M138.7 33.5v7a23 23 0 100 36V79a14.5 14.5 0 01-27 7.5l-7.4 4.3a23 23 0 0043-11.8V38.5zM124.2 73a14.5 14.5 0 1114.5-14.5A14.5 14.5 0 01124.2 73z"/>
     <path fill="#00c" d="M207.4 23.6v16.9a23 23 0 100 36V81h8.6V18.7zM193 73a14.5 14.5 0 1114.5-14.5A14.5 14.5 0 01193 73z"/>
     <path fill="#00c" d="M78.5 35.4a17.2 17.2 0 00-15 8.8 17.2 17.2 0 00-28-3v-5.3H27V81h8.6V54.2a10.7 10.7 0 1121.5 0V81h8.6V54.2a10.7 10.7 0 1121.4 0V81h8.6V52.5a17.2 17.2 0 00-17.2-17.1z"/>
-    <path fill="none" stroke="#0ff" stroke-width=".5" d="M0 90h234"/>
-    <path fill="none" stroke="#0ff" stroke-width=".5" d="M0 27h234"/>
-    <path fill="none" stroke="#0ff" stroke-width=".5" d="M9 0v117"/>
-    <path fill="none" stroke="#f0f" d="M18 0v117"/>
-    <path fill="none" stroke="#f0f" d="M27 0v117"/>
-    <path fill="none" stroke="#f0f" d="M216 0v117"/>
-    <path fill="none" stroke="#0ff" stroke-width=".5" d="M225 0v117"/>
-    <path fill="none" stroke="#f0f" d="M0 81h234"/>
-    <path fill="none" stroke="#f0f" d="M0 36h234"/>
     <path fill="red" d="M148.7 17.3l-10 4.2 25.8 14.9 8.5-5z"/>
     <path fill="#ff6d70" d="M155.9 31.4l8.6 5L216 6.6z"/>
 </svg>

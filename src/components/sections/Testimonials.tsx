@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { Transition } from "@headlessui/react";
-import { m, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { MessageSquare, BarChart3 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -83,7 +83,7 @@ export default function Testimonials() {
   return (
     <section ref={sectionRef} className="py-16 md:py-28 bg-[#050505]" id="cases">
       <div className="max-w-7xl 2xl:max-w-[90rem] 4xl:max-w-[110rem] 5xl:max-w-[120rem] 6xl:max-w-[132rem] mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 4xl:px-24 5xl:px-32 6xl:px-40">
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
@@ -98,9 +98,9 @@ export default function Testimonials() {
           <p className="text-gray-400/70 text-base sm:text-xl 3xl:text-[1.75rem] max-w-xl 2xl:max-w-[34rem] 3xl:max-w-[48rem] 4xl:max-w-[56rem] 5xl:max-w-[64rem] 6xl:max-w-[72rem] mx-auto ">
             <span dangerouslySetInnerHTML={{ __html: t("testimonials.subtitle") }} />
           </p>
-        </m.div>
+        </motion.div>
 
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.2 }}
@@ -178,7 +178,7 @@ export default function Testimonials() {
               </button>
             ))}
           </div>
-        </m.div>
+        </motion.div>
       </div>
     </section>
   );

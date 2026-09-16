@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { Linkedin, Instagram } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useMemo } from "react";
@@ -25,7 +25,7 @@ export default function FoundersAbout() {
 
         <div className="space-y-16 md:space-y-24">
           {/* Eitor Guimarães */}
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -78,10 +78,10 @@ export default function FoundersAbout() {
                 </a>
               </div>
             </div>
-          </m.div>
+          </motion.div>
 
           {/* Paulo Furtado */}
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -134,10 +134,10 @@ export default function FoundersAbout() {
                 </a>
               </div>
             </div>
-          </m.div>
+          </motion.div>
 
           {/* Brayan Cicarone */}
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -185,7 +185,7 @@ export default function FoundersAbout() {
                 </a>
               </div>
             </div>
-          </m.div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { Zap, BarChart3, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useMemo } from "react";
@@ -19,7 +19,7 @@ export default function PlatformCTAAbout() {
       <div className="max-w-7xl 2xl:max-w-[90rem] 4xl:max-w-[120rem] 5xl:max-w-[140rem] 6xl:max-w-[160rem] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 4xl:px-20 5xl:px-28 6xl:px-36 relative z-10">
 
         {/* Banner "Somos uma plataforma inovadora" */}
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -53,7 +53,7 @@ export default function PlatformCTAAbout() {
               <p className="text-gray-600 leading-relaxed text-base sm:text-lg text-center lg:text-left hyphens-none" dangerouslySetInnerHTML={{ __html: description }} />
             </div>
           </div>
-        </m.div>
+        </motion.div>
 
       </div>
     </section>

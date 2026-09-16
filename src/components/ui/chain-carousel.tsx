@@ -1,7 +1,7 @@
 "use client";
 
 import { type ComponentType, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { m, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { Search, TrendingUp, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -86,7 +86,7 @@ const CarouselItemCard = ({ chain, side }: CarouselItemProps) => {
   const xOffset = side === "left" ? -distance * 50 : distance * 50;
 
   return (
-    <m.div
+    <motion.div
       key={id}
       className={cn(
         "absolute flex items-center gap-4 px-6 py-3",
@@ -106,7 +106,7 @@ const CarouselItemCard = ({ chain, side }: CarouselItemProps) => {
       <div className={cn("flex flex-col mx-4", side === "left" ? "text-right" : "text-left")}>
         <span className="text-md lg:text-lg font-semibold text-white max-w-[220px] truncate">{name}</span>
       </div>
-    </m.div>
+    </motion.div>
   );
 };
 
@@ -196,7 +196,7 @@ export default function ChainCarousel({
   return (
     <div id="explore-section" className={cn("space-y-14", className)}>
       <div className="flex flex-col xl:flex-row max-w-7xl 3xl:max-w-[100rem] 4xl:max-w-[120rem] mx-auto px-4 md:px-8 3xl:px-12 4xl:px-20 gap-12 justify-center items-center">
-        <m.div
+        <motion.div
           className="relative w-full max-w-md xl:max-w-2xl 3xl:max-w-[40rem] 4xl:max-w-[50rem] h-[450px] flex items-center justify-center hidden xl:flex"
           onMouseEnter={() => !searchTerm && setIsPaused(true)}
           onMouseLeave={() => !searchTerm && setIsPaused(false)}
@@ -212,7 +212,7 @@ export default function ChainCarousel({
           {getVisibleItems().map((chain) => (
             <CarouselItemCard key={chain.id} chain={chain} side="left" />
           ))}
-        </m.div>
+        </motion.div>
 
         <div className="flex flex-col text-center gap-4 max-w-md w-full">
           <div className="md:hidden">
@@ -308,7 +308,7 @@ export default function ChainCarousel({
           </div>
         </div>
 
-        <m.div
+        <motion.div
           ref={rightSectionRef}
           className="relative w-full max-w-md xl:max-w-2xl 3xl:max-w-[40rem] 4xl:max-w-[50rem] h-[450px] hidden md:flex items-center justify-center"
           onMouseEnter={() => !searchTerm && setIsPaused(true)}
@@ -325,7 +325,7 @@ export default function ChainCarousel({
           {getVisibleItems().map((chain) => (
             <CarouselItemCard key={chain.id} chain={chain} side="right" />
           ))}
-        </m.div>
+        </motion.div>
       </div>
     </div>
   );

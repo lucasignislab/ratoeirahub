@@ -1,6 +1,6 @@
 "use client";
 
-import { m, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Play, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -249,7 +249,7 @@ export default function CasesSocialProof() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-brand-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="max-w-7xl 2xl:max-w-[90rem] 4xl:max-w-[120rem] 5xl:max-w-[140rem] 6xl:max-w-[160rem] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 4xl:px-20 5xl:px-28 6xl:px-36 relative z-10">
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -266,7 +266,7 @@ export default function CasesSocialProof() {
             <p className="text-base sm:text-xl text-gray-400 max-w-2xl 2xl:max-w-[50rem] 4xl:max-w-[70rem] mx-auto">
               {t("cases.socialProof.description")}
             </p>
-          </m.div>
+          </motion.div>
 
           {/* Video carousel */}
           <VideoCarousel items={videos} onVideoClick={handleCardClick} />
@@ -276,7 +276,7 @@ export default function CasesSocialProof() {
       {/* Players Section */}
       <section className="py-16 md:py-24 bg-[#050505] relative overflow-hidden">
         <div className="max-w-7xl 2xl:max-w-[90rem] 4xl:max-w-[120rem] 5xl:max-w-[140rem] 6xl:max-w-[160rem] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 4xl:px-20 5xl:px-28 6xl:px-36 relative z-10">
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -286,8 +286,8 @@ export default function CasesSocialProof() {
             <h2 className="text-h1 font-black text-white leading-tight tracking-tight">
               {t("cases.socialProof.playersTitle")}
             </h2>
-          </m.div>
-          <m.div
+          </motion.div>
+          <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true }}
@@ -303,21 +303,21 @@ export default function CasesSocialProof() {
               height={900}
               className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.03]"
             />
-          </m.div>
+          </motion.div>
         </div>
       </section>
 
       {/* Video Modal */}
       <AnimatePresence>
         {activeVideo && (
-          <m.div
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
             onClick={() => setActiveVideo(null)}
           >
-            <m.div
+            <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -337,22 +337,22 @@ export default function CasesSocialProof() {
                 playsInline
                 className="w-full h-full object-contain"
               />
-            </m.div>
-          </m.div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
       {/* YouTube Short Modal */}
       <AnimatePresence>
         {activeYouTubeShort && (
-          <m.div
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
             onClick={() => setActiveYouTubeShort(null)}
           >
-            <m.div
+            <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -372,8 +372,8 @@ export default function CasesSocialProof() {
                 allowFullScreen
                 className="w-full h-full"
               />
-            </m.div>
-          </m.div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

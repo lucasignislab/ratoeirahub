@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -57,7 +57,7 @@ export default function CasesList() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {translatedCases.map((caseStudy, index) => (
-            <m.div
+            <motion.div
               key={caseStudy.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -105,7 +105,7 @@ export default function CasesList() {
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                 </Link>
               </div>
-            </m.div>
+            </motion.div>
           ))}
         </div>
       </div>

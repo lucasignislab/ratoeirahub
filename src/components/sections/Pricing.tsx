@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { m, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { CheckCircle, Zap, ArrowRight, Info } from "lucide-react";
 
 
@@ -77,7 +77,7 @@ export default function Pricing() {
     <section ref={ref} className="py-16 md:py-28 bg-gray-50/50" id="planos">
       <div className="max-w-7xl 3xl:max-w-[100rem] 4xl:max-w-[110rem] 5xl:max-w-[120rem] 6xl:max-w-[132rem] mx-auto px-4 sm:px-6 lg:px-12 3xl:px-16 4xl:px-24 5xl:px-32 6xl:px-40">
         {/* Header */}
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
@@ -121,12 +121,12 @@ export default function Pricing() {
               </span>
             </div>
           </div>
-        </m.div>
+        </motion.div>
 
         {/* Plans Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 2xl:gap-10 items-stretch">
           {plans.map((plan, i) => (
-            <m.div
+            <motion.div
               key={plan.name}
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -202,12 +202,12 @@ export default function Pricing() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </a>
               </div>
-            </m.div>
+            </motion.div>
           ))}
         </div>
 
         {/* FAQ note */}
-        <m.div
+        <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.8, duration: 0.5 }}
@@ -215,7 +215,7 @@ export default function Pricing() {
         >
           <Info className="w-4 h-4" />
           <span>Dúvidas? <a href="#" className="text-yellow-500 font-semibold hover:underline">Fale com nosso time</a> ou veja nossas <a href="#" className="text-yellow-500 font-semibold hover:underline">perguntas frequentes</a>.</span>
-        </m.div>
+        </motion.div>
       </div>
     </section>
   );

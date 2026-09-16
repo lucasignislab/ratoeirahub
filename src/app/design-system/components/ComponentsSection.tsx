@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -22,7 +22,7 @@ function ComponentDemo({ titleKey, descriptionKey, code, children }: ComponentDe
   };
 
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -51,7 +51,7 @@ function ComponentDemo({ titleKey, descriptionKey, code, children }: ComponentDe
           <code>{code}</code>
         </pre>
       </div>
-    </m.div>
+    </motion.div>
   );
 }
 

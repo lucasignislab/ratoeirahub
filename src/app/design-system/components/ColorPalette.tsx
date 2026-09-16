@@ -1,7 +1,5 @@
 "use client";
 
-import { m } from "framer-motion";
-
 interface ColorSwatchProps {
   name: string;
   token: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, ChevronDown, ChevronLeft, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { type NavMenu } from "./header/nav-data";
@@ -11,7 +11,6 @@ import { LanguageSelector } from "@/components/ui/LanguageSelector";
 import { useTranslatedNav } from "@/hooks/useTranslatedNav";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-type Direction = "ltr" | "rtl";
 const SHELL_EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
 const EXIT_EASE = [0.7, 0, 0.84, 0] as [number, number, number, number];
 const FOCUSABLE_SELECTOR =
@@ -43,7 +42,7 @@ function Logo() {
 }
 
 const ChevronIcon = ({ open }: { open: boolean }) => (
-  <m.span
+  <motion.span
     className="inline-flex text-current"
     animate={{ rotate: open ? 180 : 0 }}
     transition={{
@@ -53,7 +52,7 @@ const ChevronIcon = ({ open }: { open: boolean }) => (
     aria-hidden
   >
     <ChevronDown className="size-3.5" strokeWidth={1.6} />
-  </m.span>
+  </motion.span>
 );
 
 const listVariants = {
@@ -137,7 +136,6 @@ function HeaderActions({
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [direction, setDirection] = useState<Direction>("ltr");
   const [mobileStack, setMobileStack] = useState<number[]>([]);
   const navRef = useRef<HTMLElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -148,9 +146,8 @@ export default function Header() {
     activeIndex !== null ? navLinks[activeIndex]?.menu ?? null : null;
 
   const openMenu = useCallback((index: number) => {
-    setDirection(activeIndex === null || index >= activeIndex ? "ltr" : "rtl");
     setActiveIndex(index);
-  }, [activeIndex]);
+  }, []);
 
   const closeMenu = useCallback(() => setActiveIndex(null), []);
 
@@ -190,24 +187,37 @@ export default function Header() {
   return (
     <header
       ref={navRef}
+      onPointerDown={(event) => event.stopPropagation()}
       className="fixed inset-x-0 top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-none lg:bg-[#0a0a0a]/92 lg:backdrop-blur-xl lg:supports-[backdrop-filter]:bg-[#0a0a0a]/88 safe-area-top"
     >
       <div className="mx-auto w-full max-w-7xl 2xl:max-w-[90rem] 4xl:max-w-[120rem] px-4 sm:px-6 lg:px-8 2xl:px-12 4xl:px-20">
         <div className="relative flex h-20 items-center justify-between">
           <Logo />
 
-          <nav className="relative hidden items-center lg:flex lg:mr-8 xl:mr-16 2xl:mr-24">
+          <nav
+            className="relative hidden items-center lg:flex lg:mr-8 xl:mr-16 2xl:mr-24"
+            onMouseLeave={closeMenu}
+          >
             <div className="flex items-center rounded-button border border-white/10 bg-white/5 px-2 py-1">
               {navLinks.map((link, index) => {
                 const open = activeIndex === index && !!link.menu;
+                if (!link.menu && hasNavigableHref(link.href)) {
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className="inline-flex items-center gap-1.5 rounded-button px-3 py-2 text-sm font-semibold text-gray-200 transition-colors hover:bg-white/10 hover:text-gray-100"
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                }
+
                 return (
-                  <div
-                    key={link.label}
-                    onMouseEnter={() => link.menu && openMenu(index)}
-                    className="relative"
-                  >
+                  <div key={link.label} onMouseEnter={() => link.menu && openMenu(index)}>
                     <button
                       type="button"
+                      onFocus={() => link.menu && openMenu(index)}
                       onClick={() => {
                         if (!link.menu && hasNavigableHref(link.href)) {
                           window.location.href = link.href;
@@ -236,11 +246,11 @@ export default function Header() {
               })}
             </div>
 
-            <div className="absolute left-1/2 top-full mt-1 w-[min(900px,calc(100vw-48px))] -translate-x-1/2">
+            <div className="absolute left-1/2 top-full z-50 w-[min(900px,calc(100vw-48px))] -translate-x-1/2 pt-1">
               <MegaMenu
                 menu={activeMenu}
-                direction={direction}
-                onMouseEnter={() => activeIndex !== null && openMenu(activeIndex)}
+                direction="ltr"
+                onMouseEnter={() => undefined}
                 onMouseLeave={closeMenu}
                 panelRef={panelRef}
                 onEscape={closeMenu}
@@ -276,7 +286,7 @@ export default function Header() {
 
       <AnimatePresence>
         {mobileOpen && (
-          <m.div
+          <motion.div
             key="mobile-shell"
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -287,7 +297,7 @@ export default function Header() {
             <div className="mx-auto max-w-7xl 3xl:max-w-[100rem] 4xl:max-w-[120rem] px-4 pb-4 pt-3 sm:px-6 3xl:px-12 4xl:px-20">
               <AnimatePresence mode="wait" initial={false}>
                 {activeMobileLink?.menu ? (
-                  <m.div
+                  <motion.div
                     key={`mobile-submenu-${activeMobileLink.label}`}
                     variants={panelVariants}
                     initial="enter"
@@ -332,9 +342,9 @@ export default function Header() {
                         </div>
                       ))}
                     </div>
-                  </m.div>
+                  </motion.div>
                 ) : (
-                  <m.div
+                  <motion.div
                     key="mobile-root"
                     variants={listVariants}
                     initial="hidden"
@@ -343,7 +353,7 @@ export default function Header() {
                     className="space-y-2"
                   >
                     {navLinks.map((link, index) => (
-                      <m.button
+                      <motion.button
                         key={link.label}
                         variants={itemVariants}
                         type="button"
@@ -368,17 +378,17 @@ export default function Header() {
                         ) : (
                           <ArrowRight className="size-4 text-gray-200" />
                         )}
-                      </m.button>
+                      </motion.button>
                     ))}
 
                     <div className="pt-3">
                       <HeaderActions mobile onAction={() => setMobileOpen(false)} />
                     </div>
-                  </m.div>
+                  </motion.div>
                 )}
               </AnimatePresence>
             </div>
-          </m.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </header>

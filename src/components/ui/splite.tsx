@@ -19,8 +19,8 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
     const el = containerRef.current
     if (!el) return
     if (typeof IntersectionObserver === "undefined") {
-      setShouldLoad(true)
-      return
+      const timer = window.setTimeout(() => setShouldLoad(true), 0)
+      return () => window.clearTimeout(timer)
     }
     const observer = new IntersectionObserver(
       (entries) => {

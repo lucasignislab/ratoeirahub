@@ -1,6 +1,6 @@
 "use client";
 
-import { m, useAnimationFrame, useMotionValue, useInView } from "framer-motion";
+import { motion, useAnimationFrame, useMotionValue, useInView } from "motion/react";
 import { useRef, useMemo } from "react";
 import Link from "next/link";
 import { ArrowRight, Server, ShieldCheck, Target, Ghost, LineChart, Zap } from "lucide-react";
@@ -109,7 +109,7 @@ export default function CTAAds() {
 
       {/* Content Section (Sobreposto no centro) */}
       <div className="relative z-20 flex flex-col items-center justify-center w-full px-4 text-center mt-8">
-        <m.div
+        <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
@@ -118,7 +118,7 @@ export default function CTAAds() {
         >
           <h2 className="text-h1 text-white mb-6 drop-shadow-[0_0_15px_rgba(0,0,0,0.8)] px-4 hyphens-none" dangerouslySetInnerHTML={{ __html: t("heroAds.cta.title") }} />
           <p className="text-body-lg text-gray-300 max-w-3xl 2xl:max-w-[50rem] 4xl:max-w-[80rem] mx-auto drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] px-4 hyphens-none" dangerouslySetInnerHTML={{ __html: t("heroAds.cta.description") }} />
-        </m.div>
+        </motion.div>
 
         <div className="mt-16 flex flex-col items-center gap-4">
           <Link

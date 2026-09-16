@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Target, Eye, ShieldCheck } from "lucide-react";
 import { GradientText } from "@/components/ui/gradient-text";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -70,7 +70,7 @@ export default function MVVAbout() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Missão */}
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -86,10 +86,10 @@ export default function MVVAbout() {
             <p className="text-gray-400 font-medium leading-relaxed text-base hyphens-none">
               {mvvData[0].content}
             </p>
-          </m.div>
+          </motion.div>
 
           {/* Visão */}
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -105,10 +105,10 @@ export default function MVVAbout() {
             <p className="text-gray-400 font-medium leading-relaxed text-base hyphens-none">
               {mvvData[1].content}
             </p>
-          </m.div>
+          </motion.div>
 
           {/* Valores */}
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -123,7 +123,7 @@ export default function MVVAbout() {
             </h2>
             <div className="relative min-h-[120px]">
               <AnimatePresence mode="wait">
-                <m.div
+                <motion.div
                   key={activeValueIndex}
                   initial={{ opacity: 0, x: 50 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -135,10 +135,10 @@ export default function MVVAbout() {
                   <p className="text-gray-400 font-medium text-sm leading-relaxed hyphens-none">
                     <strong className="text-white font-bold">{valoresItems[activeValueIndex].title}:</strong> {valoresItems[activeValueIndex].body}
                   </p>
-                </m.div>
+                </motion.div>
               </AnimatePresence>
             </div>
-          </m.div>
+          </motion.div>
 
         </div>
       </div>

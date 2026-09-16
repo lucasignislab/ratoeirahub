@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Zap } from "lucide-react";
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { GradientText } from "@/components/ui/gradient-text";
 import { BlurTextEffect } from "@/components/ui/blur-text-effect";
 import { cn } from "@/lib/utils";
@@ -128,7 +128,7 @@ export function Features() {
                 </div>
 
                 <div className="flex-1 w-full">
-                  <m.div
+                  <motion.div
                     whileHover={{ scale: 1.35, zIndex: 20 }}
                     transition={{ duration: 0.35, ease: "easeOut" }}
                     className={cn("relative aspect-[4/3] rounded-2xl border border-white/10 bg-[#111111] overflow-hidden group cursor-zoom-in shadow-xl")}
@@ -143,7 +143,7 @@ export function Features() {
                       priority={index === 0}
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent z-10" />
-                  </m.div>
+                  </motion.div>
                 </div>
               </div>
             );

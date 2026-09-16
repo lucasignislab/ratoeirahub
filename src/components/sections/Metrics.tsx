@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState, useMemo } from "react";
-import { m, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { TrendingUp, Users, MessageSquare, Layers, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -147,7 +147,7 @@ export default function Metrics() {
 
       <div className="relative z-10 max-w-7xl 2xl:max-w-[90rem] 4xl:max-w-[110rem] 5xl:max-w-[120rem] 6xl:max-w-[132rem] mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 4xl:px-24 5xl:px-32 6xl:px-40">
         {/* Header */}
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
@@ -159,10 +159,10 @@ export default function Metrics() {
           <h2 className="text-h1 font-black text-white leading-tight max-w-4xl mx-auto hyphens-none">
             <span className="block" dangerouslySetInnerHTML={{ __html: t("metrics.title") }} />
           </h2>
-        </m.div>
+        </motion.div>
 
         {/* Featured metric — aligned with secondary grid */}
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.1 }}
@@ -189,12 +189,12 @@ export default function Metrics() {
               )}
             </div>
           </div>
-        </m.div>
+        </motion.div>
 
         {/* Secondary metrics — 3 column grid */}
         <div className="mx-auto grid w-full max-w-5xl 2xl:max-w-6xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 2xl:gap-8">
           {secondary.map((metric, i) => (
-            <m.div
+            <motion.div
               key={metric.label}
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -218,7 +218,7 @@ export default function Metrics() {
               </div>
               <p className={cn("text-white font-semibold text-base 2xl:text-xl leading-tight", i === 0 && "whitespace-nowrap")}>{metric.label}</p>
               <p className={cn("text-gray-400 text-sm mt-1", i === 0 && "whitespace-nowrap")}>{metric.description}</p>
-            </m.div>
+            </motion.div>
           ))}
         </div>
       </div>

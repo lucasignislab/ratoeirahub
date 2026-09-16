@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { GradientText } from "@/components/ui/gradient-text";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -19,7 +19,7 @@ export default function HeroAbout() {
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-[1.3fr_1fr] 3xl:grid-cols-[1.4fr_1fr] 4xl:grid-cols-[1.5fr_1fr] gap-16 items-center">
           
           {/* Left: Text Content */}
-          <m.div
+          <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -38,10 +38,10 @@ export default function HeroAbout() {
               <p>{t("about.hero.paragraph1")}</p>
               <p>{t("about.hero.paragraph2")}</p>
             </div>
-          </m.div>
+          </motion.div>
 
           {/* Right: Visual / Image Grid */}
-          <m.div
+          <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
@@ -71,7 +71,7 @@ export default function HeroAbout() {
               {/* Decorative Accent */}
               <div className="absolute top-[50%] left-[50%] w-24 h-24 border-t-4 border-r-4 border-amber-400 rounded-tr-3xl z-20" />
             </div>
-          </m.div>
+          </motion.div>
         </div>
       </div>
     </section>

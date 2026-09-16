@@ -1,6 +1,6 @@
 "use client";
 
-import { m, useInView } from "framer-motion";
+import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import Image from "next/image";
 import { Bell, BarChart3 } from "lucide-react";
@@ -18,7 +18,7 @@ export default function AppSection() {
       <div className="absolute bottom-0 left-0 w-72 h-72 bg-brand-secondary/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-6xl 2xl:max-w-[90rem] 4xl:max-w-[110rem] 5xl:max-w-[130rem] 6xl:max-w-[150rem] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 4xl:px-20 5xl:px-28 6xl:px-36">
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
@@ -47,7 +47,7 @@ export default function AppSection() {
           </div>
 
           {/* Phone Mockup */}
-          <m.div
+          <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2 }}
@@ -74,8 +74,8 @@ export default function AppSection() {
               {/* Glow effect */}
               <div className="absolute -inset-4 bg-brand-primary/10 rounded-[3rem] blur-2xl -z-10" />
             </div>
-          </m.div>
-        </m.div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

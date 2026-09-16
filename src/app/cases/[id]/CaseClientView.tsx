@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { m, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "motion/react";
 import Link from "next/link";
 import { ArrowLeft, TrendingUp, CheckCircle, Image as ImageIcon, BarChart, Target, Zap, Quote } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -15,7 +15,7 @@ interface CaseData {
 const AnimatedText = ({ text, className }: { text: string; className?: string }) => {
   const words = text.split(" ");
   return (
-    <m.div
+    <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.1 }}
@@ -29,7 +29,7 @@ const AnimatedText = ({ text, className }: { text: string; className?: string })
       className={className}
     >
       {words.map((word, index) => (
-        <m.span
+        <motion.span
           key={index}
           variants={{
             hidden: { opacity: 0, y: 20 },
@@ -38,9 +38,9 @@ const AnimatedText = ({ text, className }: { text: string; className?: string })
           className="inline-block mr-2"
         >
           {word}
-        </m.span>
+        </motion.span>
       ))}
-    </m.div>
+    </motion.div>
   );
 };
 
@@ -73,7 +73,7 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
       {/* 1. HERO PARALLAX */}
       <div className="relative h-[60vh] sm:h-[80vh] min-h-[400px] sm:min-h-[600px] w-full overflow-hidden flex items-center justify-center">
         {/* Imagem de Fundo Parallax */}
-        <m.div 
+        <motion.div 
           style={{ y: yHero, opacity: opacityHero, scale: scaleHero }}
           className="absolute inset-0 w-full h-full"
         >
@@ -84,11 +84,11 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
           />
           {/* Overlay escuro para garantir leitura */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[#050505]" />
-        </m.div>
+        </motion.div>
 
         {/* Conteúdo da Hero */}
         <div className="relative z-10 w-full max-w-5xl 2xl:max-w-5xl 4xl:max-w-[100rem] mx-auto px-4 2xl:px-12 4xl:px-20 text-center mt-20">
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -101,9 +101,9 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
               <ArrowLeft className="w-4 h-4" />
               {t("cases.detail.backToCases")}
             </Link>
-          </m.div>
+          </motion.div>
 
-          <m.div
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
@@ -112,9 +112,9 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
             <span className="text-brand-primary text-sm font-bold uppercase tracking-widest">
               {role}
             </span>
-          </m.div>
+          </motion.div>
 
-          <m.div
+          <motion.div
             initial="hidden"
             animate="visible"
             variants={{
@@ -127,7 +127,7 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
             className="text-display font-black mb-8 sm:mb-12 tracking-tight text-white drop-shadow-2xl flex flex-wrap justify-center gap-x-4 px-4 text-center"
           >
             {name.split(" ").map((word, i) => (
-              <m.span
+              <motion.span
                 key={i}
                 variants={{
                   hidden: { opacity: 0, y: 40, rotateX: -20 },
@@ -136,15 +136,15 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
                 className="inline-block"
               >
                 {word}
-              </m.span>
+              </motion.span>
             ))}
-          </m.div>
+          </motion.div>
         </div>
       </div>
 
       {/* 2. OVERLAPPING RESULTS BAR */}
       <div className="relative z-20 max-w-5xl 2xl:max-w-5xl 4xl:max-w-[100rem] mx-auto px-4 2xl:px-12 4xl:px-20 -mt-16 sm:-mt-24 mb-16 sm:mb-32">
-        <m.div 
+        <motion.div 
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
@@ -159,7 +159,7 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
           className="flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 bg-[#111111]/80 backdrop-blur-xl border border-white/10 p-4 sm:p-6 md:p-8 rounded-[32px] shadow-2xl"
         >
           {results.map((res, i) => (
-            <m.div 
+            <motion.div 
               key={i} 
               variants={{
                 hidden: { opacity: 0, scale: 0.8 },
@@ -170,16 +170,16 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
             >
               <TrendingUp className="w-6 h-6 text-brand-primary" />
               <span className="font-bold text-sm sm:text-xl text-white">{res}</span>
-            </m.div>
+            </motion.div>
           ))}
-        </m.div>
+        </motion.div>
       </div>
 
       {/* 3. CONTEÚDO PRINCIPAL (Editorial Style) */}
       <div className="max-w-4xl 2xl:max-w-4xl 4xl:max-w-[90rem] mx-auto px-4 2xl:px-12 4xl:px-20 pb-16 sm:pb-32">
         
         {/* O Desafio */}
-        <m.section 
+        <motion.section 
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -187,23 +187,23 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
           className="mb-24"
         >
           <div className="flex items-center gap-4 mb-8">
-            <m.div 
+            <motion.div 
               whileHover={{ rotate: 180, scale: 1.1 }}
               transition={{ duration: 0.5 }}
               className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20"
             >
               <Target className="w-6 h-6 text-red-500" />
-            </m.div>
+            </motion.div>
             <h2 className="text-h1 font-black text-white">{t("cases.detail.challengeTitle")}</h2>
           </div>
           <AnimatedText
             text={challenge}
             className="text-lg sm:text-2xl text-gray-400 leading-relaxed font-medium"
           />
-        </m.section>
+        </motion.section>
 
         {/* Placeholders Visuais (Galeria da Operação) - Desafio */}
-        <m.section 
+        <motion.section 
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
@@ -213,7 +213,7 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
           }}
           className="mb-24 grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          <m.div 
+          <motion.div 
             variants={{
               hidden: { opacity: 0, x: -30, scale: 0.95 },
               visible: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.6 } }
@@ -225,9 +225,9 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
             <BarChart className="relative z-10 w-12 h-12 text-gray-400/20 mb-4 group-hover:text-brand-primary transition-colors duration-500 group-hover:-translate-y-2" />
             <p className="relative z-10 text-gray-400/40 font-semibold uppercase tracking-widest text-xs mb-2 group-hover:text-white transition-colors">{t("cases.detail.placeholder")}</p>
             <p className="relative z-10 text-gray-400/60 text-sm">{t("cases.detail.dashboardPrint")}</p>
-          </m.div>
+          </motion.div>
 
-          <m.div 
+          <motion.div 
             variants={{
               hidden: { opacity: 0, x: 30, scale: 0.95 },
               visible: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.6 } }
@@ -239,11 +239,11 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
             <ImageIcon className="relative z-10 w-12 h-12 text-gray-400/20 mb-4 group-hover:text-brand-primary transition-colors duration-500 group-hover:-translate-y-2" />
             <p className="relative z-10 text-gray-400/40 font-semibold uppercase tracking-widest text-xs mb-2 group-hover:text-white transition-colors">{t("cases.detail.placeholder")}</p>
             <p className="relative z-10 text-gray-400/60 text-sm">{t("cases.detail.fotoEquipe")}</p>
-          </m.div>
-        </m.section>
+          </motion.div>
+        </motion.section>
 
         {/* A Solução */}
-        <m.section 
+        <motion.section 
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -251,23 +251,23 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
           className="mb-24"
         >
           <div className="flex items-center gap-4 mb-8">
-            <m.div 
+            <motion.div 
               whileHover={{ rotate: 360, scale: 1.1 }}
               transition={{ duration: 0.8, type: "spring" }}
               className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20"
             >
               <CheckCircle className="w-6 h-6 text-emerald-500" />
-            </m.div>
+            </motion.div>
             <h2 className="text-h1 font-black text-white">{t("cases.detail.solucaoRatoeira")}</h2>
           </div>
           <AnimatedText
             text={solution}
             className="text-lg sm:text-2xl text-gray-300 leading-relaxed font-medium"
           />
-        </m.section>
+        </motion.section>
 
         {/* Placeholders Visuais (Solução) */}
-        <m.section 
+        <motion.section 
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
@@ -277,7 +277,7 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
           }}
           className="mb-24 grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          <m.div 
+          <motion.div 
             variants={{
               hidden: { opacity: 0, y: 30, scale: 0.95 },
               visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6 } }
@@ -289,9 +289,9 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
             <Zap className="relative z-10 w-12 h-12 text-gray-400/20 mb-4 group-hover:text-brand-primary transition-colors duration-500 group-hover:-translate-y-2" />
             <p className="relative z-10 text-gray-400/40 font-semibold uppercase tracking-widest text-xs mb-2 group-hover:text-white transition-colors">{t("cases.detail.placeholder")}</p>
             <p className="relative z-10 text-gray-400/60 text-sm">{t("cases.detail.printFerramenta")}</p>
-          </m.div>
+          </motion.div>
 
-          <m.div 
+          <motion.div 
             variants={{
               hidden: { opacity: 0, y: 30, scale: 0.95 },
               visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6 } }
@@ -303,11 +303,11 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
             <ImageIcon className="relative z-10 w-12 h-12 text-gray-400/20 mb-4 group-hover:text-brand-primary transition-colors duration-500 group-hover:-translate-y-2" />
             <p className="relative z-10 text-gray-400/40 font-semibold uppercase tracking-widest text-xs mb-2 group-hover:text-white transition-colors">{t("cases.detail.placeholder")}</p>
             <p className="relative z-10 text-gray-400/60 text-sm">{t("cases.detail.criacaoPaginas")}</p>
-          </m.div>
-        </m.section>
+          </motion.div>
+        </motion.section>
 
         {/* Depoimento Gigante */}
-        <m.blockquote 
+        <motion.blockquote 
           initial={{ opacity: 0, scale: 0.95, y: 40 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -318,34 +318,34 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
           {/* Efeito Glow Interno */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-          <m.div
+          <motion.div
             initial={{ rotate: -10, opacity: 0 }}
             whileInView={{ rotate: 0, opacity: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
             <Quote className="absolute top-10 left-10 w-20 h-20 text-brand-primary/10 group-hover:text-brand-primary/20 transition-colors duration-500" />
-          </m.div>
+          </motion.div>
 
           <p className="relative z-10 text-xl sm:text-3xl md:text-5xl font-bold text-white leading-tight italic mt-6 sm:mt-8 mb-8 sm:mb-12">
             &quot;{testimonial}&quot;
           </p>
 
           <div className="flex items-center gap-6 relative z-10">
-            <m.div
+            <motion.div
               whileHover={{ rotate: 5, scale: 1.1 }}
               className="w-20 h-20 rounded-full overflow-hidden border-4 border-brand-primary shadow-lg shadow-brand-primary/20"
             >
               <img loading="lazy" decoding="async" src={caseData.photo} alt={name} className="w-full h-full object-cover" />
-            </m.div>
+            </motion.div>
             <div>
               <p className="font-black text-xl sm:text-2xl text-white">{name}</p>
               <p className="text-brand-primary text-base sm:text-lg font-semibold">{role}</p>
             </div>
           </div>
-        </m.blockquote>
+        </motion.blockquote>
 
         {/* CTA */}
-        <m.div 
+        <motion.div 
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -365,7 +365,7 @@ export default function CaseClientView({ caseData }: { caseData: CaseData }) {
           >
             {t("cases.detail.nextCtaButton")}
           </Link>
-        </m.div>
+        </motion.div>
 
       </div>
     </article>

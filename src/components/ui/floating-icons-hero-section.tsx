@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { m, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "motion/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -70,7 +70,7 @@ const Icon = ({
   }, [x, y, mouseX, mouseY]);
 
   return (
-    <m.div
+    <motion.div
       ref={ref}
       style={{ x: springX, y: springY }}
       initial={{ opacity: 0, scale: 0.5 }}
@@ -82,7 +82,7 @@ const Icon = ({
       }}
       className={cn("absolute pointer-events-auto", iconData.className)}
     >
-      <m.div
+      <motion.div
         className="flex items-center justify-center h-14 w-14 md:h-20 md:w-20 p-3 rounded-3xl shadow-xl bg-white/[0.06] backdrop-blur-md border border-white/10"
         animate={{ y: [0, -8, 0, 8, 0], x: [0, 6, 0, -6, 0], rotate: [0, 5, 0, -5, 0] }}
         transition={{
@@ -113,8 +113,8 @@ const Icon = ({
         ) : iconData.icon ? (
           <iconData.icon className="h-7 w-7 md:h-10 md:w-10 text-gray-400/90" />
         ) : null}
-      </m.div>
-    </m.div>
+      </motion.div>
+    </motion.div>
   );
 };
 

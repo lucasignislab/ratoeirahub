@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 
 interface TypographySpecProps {
   label: string;
@@ -11,7 +11,7 @@ interface TypographySpecProps {
 
 function TypographySpec({ label, token, className, example }: TypographySpecProps) {
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -30,7 +30,7 @@ function TypographySpec({ label, token, className, example }: TypographySpecProp
       <div className="md:col-span-2">
         <p className={className}>{example}</p>
       </div>
-    </m.div>
+    </motion.div>
   );
 }
 

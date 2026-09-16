@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import Image from "next/image";
 
 interface MotionImageCardProps {
@@ -11,7 +11,7 @@ interface MotionImageCardProps {
 
 export function MotionImageCard({ src, alt, overlay = false }: MotionImageCardProps) {
   return (
-    <m.div
+    <motion.div
       whileHover={{ scale: 1.35, zIndex: 20 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
       className="relative aspect-[4/3] rounded-2xl border border-white/10 bg-[#111111] overflow-hidden group cursor-zoom-in shadow-xl will-change-transform"
@@ -29,6 +29,6 @@ export function MotionImageCard({ src, alt, overlay = false }: MotionImageCardPr
       {overlay && (
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/15 to-transparent z-10" />
       )}
-    </m.div>
+    </motion.div>
   );
 }

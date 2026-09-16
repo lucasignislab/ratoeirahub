@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Fragment, useRef, useCallback, useEffect, useMemo } from "react";
-import { m, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SubscriptionModal from "./SubscriptionModal";
@@ -1468,7 +1468,7 @@ function Tooltip({
       <FloatingPortal>
         <AnimatePresence>
           {isOpen && (
-            <m.div
+            <motion.div
               ref={(node) => {
                 refs.setFloating(node);
               }}
@@ -1486,7 +1486,7 @@ function Tooltip({
               className="z-[99999] max-w-[250px] rounded-lg bg-white/10 px-3 py-2 text-xs text-white shadow-xl backdrop-blur-md border border-white/20 text-center"
             >
               {content}
-            </m.div>
+            </motion.div>
           )}
         </AnimatePresence>
       </FloatingPortal>
@@ -2016,7 +2016,7 @@ export default function PricingTabs() {
         </div>
 
         <AnimatePresence mode="wait">
-          <m.div
+          <motion.div
             key={activeTab + billingCycle}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -2036,7 +2036,7 @@ export default function PricingTabs() {
                 </div>
               ))}
             </div>
-          </m.div>
+          </motion.div>
         </AnimatePresence>
 
         {/* Footer note */}

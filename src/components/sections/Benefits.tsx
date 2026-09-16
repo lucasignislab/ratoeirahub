@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo } from "react";
-import { AnimatePresence, m, useInView } from "framer-motion";
+import { AnimatePresence, motion, useInView } from "motion/react";
 import {
   BarChart3,
   BellRing,
@@ -286,7 +286,7 @@ const allBenefits = [
     <section ref={ref} className="relative pt-16 md:pt-20 lg:pt-24 pb-12 sm:pb-24 4xl:pb-28 bg-[#050505]" id="solucoes">
       <div className="relative z-10 max-w-7xl 2xl:max-w-[90rem] 4xl:max-w-[110rem] 5xl:max-w-[120rem] 6xl:max-w-[132rem] mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 4xl:px-24 5xl:px-32 6xl:px-40">
         {/* Header */}
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
@@ -308,7 +308,7 @@ const allBenefits = [
           <p className="text-gray-400/80 text-base sm:text-lg 3xl:text-[1.75rem] max-w-2xl 3xl:max-w-[54rem] 4xl:max-w-[62rem] 5xl:max-w-[68rem] 6xl:max-w-[74rem] mx-auto hyphens-none">
             {t("benefits.header.description")}
           </p>
-        </m.div>
+        </motion.div>
 
       </div>
 
@@ -322,7 +322,7 @@ const allBenefits = [
             </div>
           ) : null}
           <AnimatePresence mode="sync" initial={false}>
-            <m.article
+            <motion.article
               key={benefits[activeIndex].title}
               initial={{ x: slideDirection > 0 ? "100%" : "-100%", opacity: 1 }}
               animate={{ x: 0, opacity: 1 }}
@@ -331,7 +331,7 @@ const allBenefits = [
               className="absolute inset-0 px-4 sm:px-8 lg:px-12 py-8 flex items-center"
             >
               {renderCard(activeIndex)}
-            </m.article>
+            </motion.article>
           </AnimatePresence>
         </div>
       </div>

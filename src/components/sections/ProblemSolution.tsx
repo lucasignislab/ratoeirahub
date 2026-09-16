@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo } from "react";
-import { AnimatePresence, m, useInView } from "framer-motion";
+import { AnimatePresence, motion, useInView } from "motion/react";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { shouldHideHubPages } from "@/lib/feature-flags";
@@ -87,7 +87,7 @@ export default function ProblemSolution() {
     <section ref={ref} className="py-16 md:py-24 bg-[#f9fafb]" id="solucoes">
       <div className="max-w-7xl 2xl:max-w-[90rem] 4xl:max-w-[110rem] 5xl:max-w-[120rem] 6xl:max-w-[132rem] mx-auto px-4 sm:px-6 lg:px-12 2xl:px-16 4xl:px-24 5xl:px-32 6xl:px-40">
         {/* Header */}
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
@@ -102,10 +102,10 @@ export default function ProblemSolution() {
           <p className="text-base sm:text-lg 3xl:text-xl text-orange-400 font-semibold ">
             {t("problem.header.note")}
           </p>
-        </m.div>
+        </motion.div>
 
         {/* Tabs */}
-        <m.div
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.1 }}
@@ -135,10 +135,10 @@ export default function ProblemSolution() {
               </button>
             );
           })}
-        </m.div>
+        </motion.div>
 
         {/* Content */}
-        <m.div
+        <motion.div
           key={activeTab}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -162,7 +162,7 @@ export default function ProblemSolution() {
 
           {/* Visual (immediately below first paragraph) */}
           <div className={`relative w-full ${activeTab === "paginas" ? "max-w-4xl 3xl:max-w-[56rem] 4xl:max-w-[68rem] 5xl:max-w-[76rem] 6xl:max-w-[84rem]" : "max-w-5xl 3xl:max-w-[68rem] 4xl:max-w-[76rem] 5xl:max-w-[84rem] 6xl:max-w-[92rem]"}`}>
-            <m.div
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -198,7 +198,7 @@ export default function ProblemSolution() {
                     </div>
                     <div className="min-h-[56px] flex items-center justify-center px-4">
                       <AnimatePresence mode="wait">
-                        <m.p
+                        <motion.p
                           key={`${activeTab}-highlight-${highlightIndex}`}
                           initial={{ opacity: 0, y: 6 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -207,13 +207,13 @@ export default function ProblemSolution() {
                           className="text-gray-700 font-semibold text-lg md:text-xl 3xl:text-[1.75rem]"
                         >
                           • {activeHighlights[highlightIndex]}
-                        </m.p>
+                        </motion.p>
                       </AnimatePresence>
                     </div>
                   </div>
                 </div>
               )}
-            </m.div>
+            </motion.div>
 
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-yellow-100 rounded-full blur-3xl opacity-20 -z-10" />
@@ -233,7 +233,7 @@ export default function ProblemSolution() {
               ))}
             </div>
           )}
-        </m.div>
+        </motion.div>
       </div>
     </section>
   );

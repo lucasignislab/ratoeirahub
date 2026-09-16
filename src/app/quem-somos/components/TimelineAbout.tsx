@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useMemo } from "react";
-import { m, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "motion/react";
 import { GradientText } from "@/components/ui/gradient-text";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -70,7 +70,7 @@ export default function TimelineAbout() {
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-white/10 -translate-x-1/2 rounded-full" />
 
           {/* Animated Glow Line */}
-          <m.div 
+          <motion.div 
             style={{ height }}
             className="absolute left-4 md:left-1/2 top-0 w-1 bg-gradient-to-b from-amber-500 to-orange-600 -translate-x-1/2 rounded-full shadow-[0_0_15px_rgba(245,158,11,0.6)] origin-top z-10" 
           />
@@ -85,7 +85,7 @@ export default function TimelineAbout() {
                   <div className="absolute left-4 md:left-1/2 w-6 h-6 bg-amber-500 rounded-full border-4 border-[#050505] transform -translate-x-1/2 shadow-md z-20" />
                   
                   {/* Content Left */}
-                  <m.div
+                  <motion.div
                     initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
@@ -107,7 +107,7 @@ export default function TimelineAbout() {
                         {item.description}
                       </p>
                     </div>
-                  </m.div>
+                  </motion.div>
 
                   {/* Empty Space for Grid Alignment */}
                   <div className={`hidden md:block w-1/2 ${isLeft ? "order-2" : "order-1"}`} />

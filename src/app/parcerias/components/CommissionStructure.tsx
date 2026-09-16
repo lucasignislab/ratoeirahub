@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { m } from "framer-motion";
+import { motion } from "motion/react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 type Tier = {
@@ -48,7 +48,7 @@ const CommissionStructure = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl 2xl:max-w-[90rem] 4xl:max-w-[100rem] mx-auto">
           {tiers.map((tier, index) => (
-            <m.div
+            <motion.div
               key={tier.name}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ const CommissionStructure = () => {
               {tier.note && (
                 <p className="mt-4 text-xs text-gray-500 text-center italic">{tier.note}</p>
               )}
-            </m.div>
+            </motion.div>
           ))}
         </div>
       </div>

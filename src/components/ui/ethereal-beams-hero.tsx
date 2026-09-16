@@ -449,7 +449,7 @@ export const BeamsBackground: FC<{
 // EtherealBeamsHero COMPONENT (UI Layout)
 // ============================================================================
 
-import { m } from "framer-motion"
+import { motion } from "motion/react"
 
 export default function EtherealBeamsHero() {
   const { t } = useLanguage();
@@ -471,7 +471,7 @@ export default function EtherealBeamsHero() {
       <div className="flex flex-col items-center justify-center min-h-[85svh] sm:min-h-screen px-4 pt-28 sm:pt-[clamp(7rem,16vh,12rem)] pb-12 sm:pb-[clamp(4.5rem,10vh,8.5rem)]">
         {/* Hero Content */}
         <div className="max-w-6xl 2xl:max-w-[90rem] 4xl:max-w-[110rem] 5xl:max-w-[130rem] 6xl:max-w-[150rem] text-center">
-          <m.h1
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -479,7 +479,7 @@ export default function EtherealBeamsHero() {
             dangerouslySetInnerHTML={{ __html: t("heroAds.title") }}
           />
 
-          <m.p
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -487,7 +487,7 @@ export default function EtherealBeamsHero() {
             dangerouslySetInnerHTML={{ __html: t("heroAds.subtitle") }}
           />
 
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -500,11 +500,11 @@ export default function EtherealBeamsHero() {
               {t("header.signIn")}
               <ArrowRight className="w-4 h-4" />
             </a>
-          </m.div>
+          </motion.div>
 
 
 
-          <m.div
+          <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.45 }}
@@ -520,7 +520,7 @@ export default function EtherealBeamsHero() {
                 className="object-cover object-top"
               />
             </div>
-          </m.div>
+          </motion.div>
         </div>
       </div>
     </BeamsBackground>
