@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { Check, ChevronDown, Minus, Plus } from "lucide-react";
+import { Check, ChevronDown, ChevronLeft, ChevronRight, Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -119,9 +119,9 @@ function networkTier(count: number): "one" | "two" | "all" {
 
 function SectionTitle({ children, description }: { children: React.ReactNode; description: string }) {
   return (
-    <div className="mx-auto mb-10 max-w-3xl text-center md:mb-14">
-      <h2 className="text-h1 text-white">{children}</h2>
-      <p className="text-body mx-auto mt-4 max-w-[68ch] text-gray-300">{description}</p>
+    <div className="mx-auto mb-8 max-w-3xl text-center md:mb-14">
+      <h2 className="text-[clamp(2rem,9vw,3.5rem)] font-black leading-[1.02] tracking-[-0.035em] text-white">{children}</h2>
+      <p className="mx-auto mt-3 max-w-[68ch] text-base leading-7 text-gray-300 sm:mt-4 sm:text-lg">{description}</p>
     </div>
   );
 }
@@ -133,7 +133,7 @@ function ChoiceButton({ active, children, onClick }: { active: boolean; children
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        "text-body-label min-h-12 rounded-input border px-4 py-3 text-left outline-none transition-colors focus-visible:border-brand-secondary focus-visible:ring-2 focus-visible:ring-brand-secondary/30",
+        "text-body-label min-h-12 w-full rounded-input border px-4 py-3 text-left outline-none transition-colors focus-visible:border-brand-secondary focus-visible:ring-2 focus-visible:ring-brand-secondary/30",
         active ? "border-brand-primary bg-brand-primary text-text-primary" : "border-white/10 bg-white/[0.04] text-gray-300 hover:border-white/25 hover:bg-white/[0.07] hover:text-white",
       )}
     >
@@ -160,7 +160,7 @@ function QuantityControl({
   };
 
   return (
-    <div className="flex min-h-14 items-center justify-between gap-3 rounded-input border border-white/10 bg-white/[0.04] px-3 py-2">
+    <div className="flex min-h-14 items-center justify-between gap-2 rounded-input border border-white/10 bg-white/[0.04] px-3 py-2">
       <span className="flex min-w-0 items-center gap-3">
         <span className="flex h-6 w-8 shrink-0 items-center justify-center">
           <Image src={logo} alt="" width={logoWidth ?? 24} height={24} className="max-h-6 w-auto object-contain" />
@@ -168,9 +168,9 @@ function QuantityControl({
         <span className="text-sm font-semibold leading-5 text-white">{label}</span>
       </span>
       <span className="flex shrink-0 items-center gap-1 rounded-input bg-black/25 p-1">
-        <button type="button" aria-label={`Diminuir ${label}`} onClick={() => updateValue(value - 1)} className="grid h-10 w-10 place-items-center rounded-input text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><Minus className="h-4 w-4" /></button>
-        <input aria-label={`Quantidade de ${label}`} inputMode="numeric" min={1} max={999} value={value} onChange={(event) => updateValue(Number(event.target.value.replace(/\D/g, "")) || 1)} className="h-10 w-12 bg-transparent text-center font-bold tabular-nums text-white outline-none" />
-        <button type="button" aria-label={`Aumentar ${label}`} onClick={() => updateValue(value + 1)} className="grid h-10 w-10 place-items-center rounded-input text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><Plus className="h-4 w-4" /></button>
+        <button type="button" aria-label={`Diminuir ${label}`} onClick={() => updateValue(value - 1)} className="grid h-11 w-11 place-items-center rounded-input text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><Minus className="h-4 w-4" /></button>
+        <input aria-label={`Quantidade de ${label}`} inputMode="numeric" min={1} max={999} value={value} onChange={(event) => updateValue(Number(event.target.value.replace(/\D/g, "")) || 1)} className="h-11 w-10 min-w-0 bg-transparent text-center font-bold tabular-nums text-white outline-none sm:w-12" />
+        <button type="button" aria-label={`Aumentar ${label}`} onClick={() => updateValue(value + 1)} className="grid h-11 w-11 place-items-center rounded-input text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary"><Plus className="h-4 w-4" /></button>
       </span>
     </div>
   );
@@ -194,7 +194,7 @@ function ResultPriceCard({
   return (
     <div className={cn("flex min-h-36 flex-col rounded-card border p-3", featured ? "border-emerald-500/70 bg-emerald-500/[0.08]" : "border-white/10 bg-white/[0.035]")}>
       <span className={cn("text-xs font-bold uppercase tracking-[0.08em]", featured ? "text-emerald-400" : "text-gray-400")}>{label}</span>
-      <div className="mt-2 flex items-baseline gap-1 tabular-nums text-white">
+      <div className="mt-2 flex flex-wrap items-baseline gap-x-1 gap-y-0 tabular-nums text-white">
         {installment && <span className="text-h4">{installment}</span>}
         <span className="text-2xl font-black tracking-[-0.03em]">R$ {currency.format(price)}</span>
         {!installment && <span className="text-small text-gray-400">/mês</span>}
@@ -238,8 +238,8 @@ function AnswerSummary({ items, onEdit, className }: { items: SummaryItem[]; onE
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
       {items.map((item) => (
-        <button key={item.step} type="button" onClick={() => onEdit(item.step)} className="group rounded-badge border border-white/10 bg-white/[0.05] px-3 py-1.5 text-small font-semibold text-white transition-colors hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
-          {item.label} <span className="ml-1 text-gray-400 transition-colors group-hover:text-white">editar</span>
+        <button key={item.step} type="button" onClick={() => onEdit(item.step)} className="group flex min-h-10 items-center justify-between gap-3 rounded-badge border border-white/10 bg-white/[0.05] px-3 py-1.5 text-left text-small font-semibold text-white transition-colors hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary sm:min-h-0">
+          <span className="min-w-0 break-words">{item.label}</span><span className="shrink-0 text-gray-400 transition-colors group-hover:text-white">editar</span>
         </button>
       ))}
     </div>
@@ -275,12 +275,12 @@ function RecommendedPlanResult({
     <div aria-live="polite">
       <AnswerSummary items={summaryItems} onEdit={onEdit} className="mb-2" />
 
-      <div className="rounded-card border border-brand-primary/70 bg-[#111] p-5 sm:p-6">
+      <div className="rounded-card border border-brand-primary/70 bg-[#111] p-4 sm:p-6">
         <span className="rounded-badge bg-brand-primary px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-black">Plano indicado para você</span>
         <h3 className="text-h4 mt-3 text-white">{PRODUCT_LABELS[product]} {PLAN_NAMES[recommended]}</h3>
         <p className="mt-2 max-w-none text-sm text-gray-300">{PRODUCT_DESCRIPTIONS[product][recommended]} A configuração abaixo já considera o seu volume, as redes escolhidas e os limites informados.</p>
 
-        <div className="mt-4 grid gap-4 lg:grid-cols-3">
+        <div className="mt-5 grid gap-3 lg:grid-cols-3 lg:gap-4">
           <ResultPriceCard label="Mensal" price={selectedPrices.monthly[recommended]} />
           <ResultPriceCard label="Semestral" installment="6x" price={selectedPrices.semiannual[recommended]} cashPrice={selectedPrices.semiannualCash[recommended]} savings={semiannualSavings} />
           <ResultPriceCard label="Anual" installment="12x" price={selectedPrices.annual[recommended]} cashPrice={selectedPrices.annualCash[recommended]} savings={annualSavings} featured />
@@ -288,7 +288,7 @@ function RecommendedPlanResult({
 
         <p className="mt-3 text-center text-xs text-brand-primary">Economia calculada sobre o pagamento mensal. Valores sujeitos a reajuste.</p>
 
-        <div className={cn("mt-4 grid gap-8 border-t border-white/10 pt-4", product === "hub" && "lg:grid-cols-2")}>
+        <div className={cn("mt-5 grid gap-7 border-t border-white/10 pt-5", product === "hub" && "lg:grid-cols-2")}>
           {product !== "pages" && (
             <div className="min-w-0">
               <div className="mb-3 flex items-center gap-3 text-sm font-bold uppercase tracking-[0.08em] text-gray-400">
@@ -304,14 +304,14 @@ function RecommendedPlanResult({
                       const network = ACCOUNT_NETWORKS.find((item) => item.id === networkId);
                       if (!network) return null;
                       return (
-                        <div key={network.id} className="flex items-center justify-between gap-4 border-b border-white/[0.08] pb-2 text-sm">
+                        <div key={network.id} className="flex min-h-11 items-center justify-between gap-4 border-b border-white/[0.08] py-2 text-sm">
                           <span className="flex items-center gap-3 text-gray-300"><Image src={network.logo} alt="" width={network.logoWidth ?? 22} height={22} className="h-[22px] w-auto object-contain" />{network.label}</span>
                           <strong className="text-white">{formatLimit(NETWORK_ACCOUNT_LIMITS[network.id][recommended])}</strong>
                         </div>
                       );
                     })}
                     {networks.includes("google") && (
-                      <div className="flex items-center justify-between gap-4 border-b border-white/[0.08] pb-2 text-sm sm:col-span-2">
+                      <div className="flex min-h-11 items-center justify-between gap-4 border-b border-white/[0.08] py-2 text-sm sm:col-span-2">
                         <span className="flex items-center gap-3 font-bold uppercase tracking-[0.06em] text-gray-400"><Image src="/icons/pricing/google-ads.webp" alt="" width={22} height={22} className="h-[22px] w-auto object-contain" />E-mails do Google Ads</span>
                         <strong className="text-white">{formatLimit(GOOGLE_EMAIL_LIMITS[recommended], false)}</strong>
                       </div>
@@ -505,10 +505,10 @@ function PlanCalculator() {
   };
 
   return (
-    <section id="calculadora" className="relative scroll-mt-24 overflow-hidden bg-[#080808] px-4 py-12 sm:px-6 md:py-16">
+    <section id="calculadora" className="relative scroll-mt-32 overflow-hidden bg-[#080808] px-4 py-12 sm:px-6 md:scroll-mt-24 md:py-16">
       <div className="pointer-events-none absolute left-1/2 top-0 h-80 w-[48rem] -translate-x-1/2 rounded-full bg-brand-primary/[0.06] blur-[120px]" />
       <div className="mx-auto max-w-6xl">
-        <div className="relative overflow-hidden rounded-card border border-white/[0.08] bg-[#111] p-4 shadow-card-hover sm:p-5 lg:p-4">
+        <div className="relative overflow-hidden rounded-card border border-white/[0.08] bg-[#111] p-4 shadow-card-hover sm:p-5">
           <div className="mx-auto mb-2 max-w-3xl text-center">
             <h2 className="text-h3 text-white">Descubra o plano certo para você</h2>
             <p className="mx-auto mt-1 max-w-[68ch] text-xs text-gray-300">Uma pergunta por vez. Suas respostas ficam salvas e você pode voltar quando quiser.</p>
@@ -537,9 +537,9 @@ function PlanCalculator() {
                   onGoogleEmailsChange={setGoogleEmails}
                 />
               </div>
-              <div className="mt-7 flex items-center justify-between border-t border-white/[0.08] pt-5">
-                <Button type="button" variant="ghost" disabled={safeStepIndex === 0} onClick={() => setStepIndex((current) => Math.max(0, current - 1))}>Voltar</Button>
-                <Button type="button" onClick={() => setStepIndex((current) => Math.min(steps.length - 1, current + 1))}>Continuar</Button>
+              <div className="mt-7 grid grid-cols-2 gap-3 border-t border-white/[0.08] pt-5">
+                <Button type="button" variant="ghost" className="min-h-11 w-full" disabled={safeStepIndex === 0} onClick={() => setStepIndex((current) => Math.max(0, current - 1))}>Voltar</Button>
+                <Button type="button" className="min-h-11 w-full" onClick={() => setStepIndex((current) => Math.min(steps.length - 1, current + 1))}>Continuar</Button>
               </div>
             </div>
           )}
@@ -623,17 +623,65 @@ function ComparisonTable() {
     "compare-hub": true,
   });
 
-  const renderComparisonValue = (value: ComparisonValue) => {
-    if (value === true) return <Check className="mx-auto h-5 w-5 text-brand-primary" aria-label="Incluído" />;
+  const renderComparisonValue = (value: ComparisonValue, centered = true) => {
+    if (value === true) return <Check className={cn("h-5 w-5 text-brand-primary", centered && "mx-auto")} aria-label="Incluído" />;
     if (typeof value === "string" && /^ilimitad/i.test(value)) return <span className="inline-flex rounded-badge border border-white/10 bg-white/[0.05] px-2 py-0.5 text-xs font-semibold text-white">{value}</span>;
     return value;
   };
 
   return (
-    <section id="comparacao" className="scroll-mt-24 bg-[#0d0d0d] px-4 py-16 sm:px-6 md:py-24">
+    <section id="comparacao" className="scroll-mt-32 bg-[#0d0d0d] px-4 py-16 sm:px-6 md:scroll-mt-24 md:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionTitle description="Compare os limites essenciais de cada plano antes de escolher.">Compare plano por plano</SectionTitle>
-        <div className="overflow-x-auto rounded-card border border-white/[0.08] bg-[#111] shadow-card-resting">
+        <div className="space-y-2 md:hidden">
+          {COMPARISON_SECTIONS.map((section) => {
+            const isCollapsed = collapsed[section.id];
+            return (
+              <div key={section.id} className="overflow-hidden rounded-card border border-white/[0.08] bg-[#111] shadow-card-resting">
+                <button
+                  type="button"
+                  aria-expanded={!isCollapsed}
+                  aria-controls={`${section.id}-mobile-rows`}
+                  onClick={() => setCollapsed((current) => ({ ...current, [section.id]: !current[section.id] }))}
+                  className="flex min-h-14 w-full items-center justify-between gap-4 px-4 text-left text-sm font-bold uppercase tracking-[0.12em] text-white outline-none transition-colors hover:bg-white/[0.05] focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-secondary"
+                >
+                  <span>{section.label}</span>
+                  <ChevronDown aria-hidden="true" className={cn("h-5 w-5 shrink-0 text-brand-primary transition-transform", !isCollapsed && "rotate-180")} />
+                </button>
+                {!isCollapsed && (
+                  <div id={`${section.id}-mobile-rows`} className="border-t border-white/[0.08] px-3 pb-3">
+                    {section.rows.map((row) => (
+                      <div key={row.label} className="border-b border-white/[0.07] py-4 last:border-b-0">
+                        <div className="mb-3 text-sm font-semibold leading-5 text-white">
+                          {row.label === "Gerenciador Integrado" ? (
+                            <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                              <span>{row.label}</span>
+                              <span className="flex items-center gap-2" aria-label="Google Ads, Meta Ads, Taboola e NewsBreak">
+                                {ACCOUNT_NETWORKS.map((network) => (
+                                  <Image key={network.id} src={network.logo} alt={network.label} width={20} height={20} className="max-h-5 w-auto object-contain" />
+                                ))}
+                              </span>
+                            </span>
+                          ) : row.label}
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          {row.values.map((value, index) => (
+                            <div key={`${row.label}-mobile-${PLAN_NAMES[index]}`} className="min-w-0 rounded-input bg-white/[0.045] px-3 py-2.5">
+                              <span className="mb-1 block text-[10px] font-bold uppercase tracking-[0.08em] text-gray-500">{PLAN_NAMES[index]}</span>
+                              <div className="break-words text-sm font-semibold text-gray-200">{renderComparisonValue(value, false)}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="hidden overflow-x-auto rounded-card border border-white/[0.08] bg-[#111] shadow-card-resting md:block">
           <table className="text-small w-full min-w-[860px] border-separate border-spacing-0">
             <colgroup>
               <col className="w-[36%]" />
@@ -760,15 +808,38 @@ function PricingCards() {
   const [product, setProduct] = useState<Product>("hub");
   const [billing, setBilling] = useState<Billing>("annual");
   const [networkCount, setNetworkCount] = useState<1 | 2 | 6>(1);
+  const [activeCard, setActiveCard] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const tier = networkTier(networkCount);
   const prices = PRICES[product][tier][billing];
 
+  const scrollToCard = (index: number) => {
+    const container = carouselRef.current;
+    const targetIndex = Math.min(PLAN_NAMES.length - 1, Math.max(0, index));
+    const card = container?.children.item(targetIndex) as HTMLElement | null;
+    if (!container || !card) return;
+    container.scrollTo({ left: card.offsetLeft - container.offsetLeft, behavior: "smooth" });
+    setActiveCard(targetIndex);
+  };
+
+  const updateActiveCard = () => {
+    const container = carouselRef.current;
+    if (!container) return;
+    const cards = Array.from(container.children) as HTMLElement[];
+    const nextIndex = cards.reduce((closestIndex, card, index) => {
+      const currentDistance = Math.abs(cards[closestIndex].offsetLeft - container.offsetLeft - container.scrollLeft);
+      const nextDistance = Math.abs(card.offsetLeft - container.offsetLeft - container.scrollLeft);
+      return nextDistance < currentDistance ? index : closestIndex;
+    }, 0);
+    setActiveCard(nextIndex);
+  };
+
   return (
-    <section id="pricing-cards" className="scroll-mt-24 bg-[#080808] px-4 py-16 sm:px-6 md:py-24">
+    <section id="pricing-cards" className="scroll-mt-32 bg-[#080808] px-4 py-16 sm:px-6 md:scroll-mt-24 md:py-24">
       <div className="mx-auto max-w-[1400px]">
         <SectionTitle description="Escolha o produto, o número de redes simultâneas e o período para visualizar os valores corretos.">Escolha como quer começar</SectionTitle>
         <div className="mb-10 flex flex-col items-center gap-4">
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="grid w-full max-w-3xl gap-2 sm:grid-cols-3">
             {(["ads", "pages", "hub"] as Product[]).map((item) => (
               <ChoiceButton key={item} active={product === item} onClick={() => setProduct(item)}>
                 <span className="flex items-center gap-2">
@@ -780,7 +851,7 @@ function PricingCards() {
               </ChoiceButton>
             ))}
           </div>
-          <div className={cn("mt-3 grid w-full max-w-5xl items-end gap-6", product !== "pages" && "lg:grid-cols-2")}>
+          <div className={cn("mt-3 grid w-full max-w-5xl items-end gap-7", product !== "pages" && "lg:grid-cols-2")}>
             {product !== "pages" && (
               <div>
                 <label htmlFor="network-count" className="mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-gray-400">Quantas redes de tráfego</label>
@@ -802,8 +873,8 @@ function PricingCards() {
 
             <div className={cn(product === "pages" && "mx-auto w-full max-w-lg")}>
               <span className="mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-gray-400">Por quanto tempo</span>
-              <div role="group" aria-label="Período de contratação" className="relative flex min-h-14 items-center rounded-badge border border-white/15 bg-[#171717] p-1">
-                <span className="absolute -right-2 -top-4 rounded-badge bg-emerald-500 px-3 py-1 text-xs font-black uppercase text-black">2 meses grátis</span>
+              <div role="group" aria-label="Período de contratação" className="relative grid min-h-14 grid-cols-3 items-center rounded-badge border border-white/15 bg-[#171717] p-1">
+                <span className="absolute right-2 top-0 -translate-y-1/2 rounded-badge bg-emerald-500 px-3 py-1 text-[10px] font-black uppercase text-black sm:text-xs">2 meses grátis</span>
                 {(["monthly", "semiannual", "annual"] as Billing[]).map((item) => (
                   <button
                     key={item}
@@ -811,7 +882,7 @@ function PricingCards() {
                     aria-pressed={billing === item}
                     onClick={() => setBilling(item)}
                     className={cn(
-                      "min-h-11 flex-1 rounded-badge px-4 text-base font-bold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-secondary",
+                      "min-h-11 min-w-0 rounded-badge px-2 text-sm font-bold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-secondary sm:px-4 sm:text-base",
                       billing === item ? "bg-white/15 text-white" : "text-gray-400 hover:bg-white/[0.06] hover:text-white",
                     )}
                   >
@@ -823,7 +894,19 @@ function PricingCards() {
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mb-4 flex items-center justify-between md:hidden">
+          <span className="text-sm font-semibold text-gray-300" aria-live="polite">Plano {activeCard + 1} de {PLAN_NAMES.length}</span>
+          <div className="flex items-center gap-2" aria-label="Navegação dos planos">
+            <button type="button" aria-label="Ver plano anterior" disabled={activeCard === 0} onClick={() => scrollToCard(activeCard - 1)} className="grid h-11 w-11 place-items-center rounded-button border border-white/15 text-white transition-colors hover:border-white/30 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary disabled:cursor-not-allowed disabled:opacity-35">
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button type="button" aria-label="Ver próximo plano" disabled={activeCard === PLAN_NAMES.length - 1} onClick={() => scrollToCard(activeCard + 1)} className="grid h-11 w-11 place-items-center rounded-button border border-white/15 text-white transition-colors hover:border-white/30 hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary disabled:cursor-not-allowed disabled:opacity-35">
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+
+        <div ref={carouselRef} onScroll={updateActiveCard} className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-2 md:overflow-visible md:pb-0 xl:grid-cols-4">
           {PLAN_NAMES.map((name, index) => {
             const featured = index === 1;
             const unlimited = index === PLAN_NAMES.length - 1;
@@ -834,14 +917,14 @@ function PricingCards() {
             const savings = cashPrice ? Math.max(0, Math.round((1 - cashPrice / (monthlyTotal * months)) * 100)) : 0;
             const installment = billing === "annual" ? "12x" : billing === "semiannual" ? "6x" : null;
             return (
-              <article key={name} className={cn("relative flex min-h-[760px] flex-col rounded-card border border-white/[0.12] bg-[#111] p-5 shadow-card-resting transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-white/20 hover:shadow-card-hover", featured && "border-brand-primary/80 ring-1 ring-brand-primary/70", unlimited && "border-emerald-500/80 ring-1 ring-emerald-500/60")}>
-                {featured && <span className="text-body-badge absolute -top-3 left-5 rounded-badge bg-brand-primary px-3 py-1 font-bold uppercase tracking-[0.08em] text-text-primary">Mais escolhido</span>}
-                {unlimited && <span className="text-body-badge absolute -top-3 right-5 rounded-badge bg-emerald-500 px-3 py-1 font-bold uppercase tracking-[0.08em] text-black">Sem limites</span>}
+              <article key={name} className={cn("relative flex min-w-full snap-start scroll-ml-0 flex-col rounded-card border border-white/[0.12] bg-[#111] p-5 shadow-card-resting transition-[transform,border-color,box-shadow] duration-200 hover:border-white/20 hover:shadow-card-hover md:min-w-0 md:snap-none md:hover:-translate-y-1 xl:min-h-[760px]", featured && "border-brand-primary/80 ring-1 ring-brand-primary/70", unlimited && "border-emerald-500/80 ring-1 ring-emerald-500/60")}>
+                {featured && <span className="text-body-badge absolute -top-3 left-4 rounded-badge bg-brand-primary px-3 py-1 font-bold uppercase tracking-[0.08em] text-text-primary sm:left-5">Mais escolhido</span>}
+                {unlimited && <span className="text-body-badge absolute -top-3 right-4 rounded-badge bg-emerald-500 px-3 py-1 font-bold uppercase tracking-[0.08em] text-black sm:right-5">Sem limites</span>}
                 <h3 className="text-h3 text-white">{name}</h3>
-                <p className="text-small mt-2 min-h-12 text-gray-400">{PRODUCT_DESCRIPTIONS[product][index]}</p>
-                <div className="mt-5 min-h-28 tabular-nums">
+                <p className="text-small mt-2 text-gray-400 md:min-h-12">{PRODUCT_DESCRIPTIONS[product][index]}</p>
+                <div className="mt-5 tabular-nums md:min-h-28">
                   {installment && <span className="text-sm font-black uppercase text-brand-primary">{installment}</span>}
-                  <div className="flex items-end gap-1"><span className="mb-1 text-sm text-gray-400">R$</span><span className="text-4xl font-black tracking-[-0.04em] text-white">{currency.format(prices[index])}</span><span className="mb-1 text-sm text-gray-400">/mês</span></div>
+                  <div className="flex flex-wrap items-end gap-x-1"><span className="mb-1 text-sm text-gray-400">R$</span><span className="text-4xl font-black tracking-[-0.04em] text-white">{currency.format(prices[index])}</span><span className="mb-1 text-sm text-gray-400">/mês</span></div>
                   {cashPrice ? <p className="mt-1 text-sm text-gray-300">ou <strong className="text-white">R$ {currency.format(cashPrice)}</strong> à vista</p> : <p className="mt-1 text-sm text-gray-400">Cobrança mensal</p>}
                   {savings > 0 && <span className="mt-3 block rounded-badge border border-emerald-500/50 bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-300">Economize {savings}% pagando à vista</span>}
                 </div>
@@ -853,6 +936,11 @@ function PricingCards() {
               </article>
             );
           })}
+        </div>
+        <div className="mt-3 flex items-center justify-center gap-2 md:hidden" aria-label="Selecionar plano">
+          {PLAN_NAMES.map((name, index) => (
+            <button key={name} type="button" aria-label={`Ver plano ${name}`} aria-current={activeCard === index ? "true" : undefined} onClick={() => scrollToCard(index)} className={cn("h-2.5 rounded-full transition-[width,background-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#080808]", activeCard === index ? "w-8 bg-brand-primary" : "w-2.5 bg-white/25 hover:bg-white/40")} />
+          ))}
         </div>
         <p className="mt-6 text-center text-xs text-[#777]">Os links de contratação serão conectados após a aprovação desta nova estrutura.</p>
       </div>

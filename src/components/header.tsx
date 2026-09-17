@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, ChevronDown, ChevronLeft, Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { type NavMenu } from "./header/nav-data";
 import { MegaMenu } from "./header/mega-menu";
@@ -28,13 +29,16 @@ function Logo() {
       aria-label="Ratoeira Hub"
     >
       <div className="flex items-center justify-center self-center max-lg:absolute max-lg:right-[calc(50%+6.8rem)]">
-        <img
+        <Image
           src="/logohub.png"
           alt="Ratoeira Hub"
-          className="h-11 md:h-[88px] w-auto object-contain"
+          width={72}
+          height={72}
+          priority
+          className="h-11 w-auto object-contain sm:h-12 lg:h-16 xl:h-[72px]"
         />
       </div>
-      <span className="text-[1.25rem] md:text-[2.5rem] font-black tracking-tight text-brand-primary whitespace-nowrap max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2">
+      <span className="whitespace-nowrap text-[1.25rem] font-black tracking-tight text-brand-primary max-lg:absolute max-lg:left-1/2 max-lg:-translate-x-1/2 sm:text-[1.5rem] lg:text-[2rem] xl:text-[2.5rem]">
         Ratoeira Hub
       </span>
     </Link>
