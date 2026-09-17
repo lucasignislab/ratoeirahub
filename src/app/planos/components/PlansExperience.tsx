@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 type Product = "ads" | "pages" | "hub";
 type Billing = "monthly" | "semiannual" | "annual";
 type Network = "google" | "meta" | "taboola" | "newsbreak" | "mgid" | "tiktok";
+type AccountNetwork = Exclude<Network, "mgid" | "tiktok">;
 type CalculatorStep = "product" | "networks" | "volume" | "accounts" | "googleEmails" | "result";
 
 const PLAN_NAMES = ["Basic", "Starter", "Scale", "Max"] as const;
@@ -20,6 +21,12 @@ const NETWORKS: { id: Network; label: string; logo: string; logoWidth?: number }
   { id: "mgid", label: "MGID", logo: "/logos/mgid.svg", logoWidth: 32 },
   { id: "tiktok", label: "TikTok Ads", logo: "/logos/tiktoklogo - Editado.png" },
 ];
+
+const ACCOUNT_NETWORKS = NETWORKS.filter((network): network is typeof network & { id: AccountNetwork } => network.id !== "mgid" && network.id !== "tiktok");
+
+function supportsAdAccounts(network: Network): network is AccountNetwork {
+  return network !== "mgid" && network !== "tiktok";
+}
 
 const PRODUCT_LABELS: Record<Product, string> = {
   ads: "Ratoeira Ads",
@@ -81,18 +88,15 @@ const PRICES: Record<Product, Record<"one" | "two" | "all", PriceSet>> = {
 };
 
 const SALES = ["1.000", "2.500", "5.000", "15.000"];
-const VISITS = ["200 mil", "500 mil", "1 milhão", "3 milhões"];
 const PAGE_VISITS = ["200.000", "500.000", "1.000.000", "3.000.000"];
 const DOMAINS = ["10", "20", "40", "100"];
 const TAGS = ["15", "80", "300", "Ilimitadas"];
 const WEBHOOKS = ["7", "15", "Ilimitados", "Ilimitados"];
-const NETWORK_ACCOUNT_LIMITS: Record<Network, number[]> = {
+const NETWORK_ACCOUNT_LIMITS: Record<AccountNetwork, number[]> = {
   google: [10, 20, 999, 999],
   meta: [3, 7, 999, 999],
   taboola: [2, 5, 999, 999],
   newsbreak: [2, 5, 999, 999],
-  mgid: [2, 5, 999, 999],
-  tiktok: [2, 5, 999, 999],
 };
 const GOOGLE_EMAIL_LIMITS = [3, 10, 30, 999];
 const EXTRA_SALE_RATE = {
@@ -214,17 +218,18 @@ function getAnswerSummaryItems(
   product: Product,
   networks: Network[],
   volume: number,
-  accounts: Record<Network, number>,
+  accounts: Record<AccountNetwork, number>,
   googleEmails: number,
 ): SummaryItem[] {
   const options = product === "pages" ? VISIT_OPTIONS : SALES_OPTIONS;
-  const highestAccountCount = Math.max(...networks.map((network) => accounts[network]));
+  const accountNetworks = networks.filter(supportsAdAccounts);
+  const highestAccountCount = accountNetworks.length > 0 ? Math.max(...accountNetworks.map((network) => accounts[network])) : 0;
 
   return [
     { label: PRODUCT_LABELS[product], step: "product" },
     ...(product !== "pages" ? [{ label: networks.map((id) => NETWORKS.find((network) => network.id === id)?.label).join(", "), step: "networks" as CalculatorStep }] : []),
     { label: options[volume], step: "volume" },
-    ...(product !== "pages" ? [{ label: `${highestAccountCount} ${highestAccountCount === 1 ? "conta" : "contas"}`, step: "accounts" as CalculatorStep }] : []),
+    ...(product !== "pages" && accountNetworks.length > 0 ? [{ label: `${highestAccountCount} ${highestAccountCount === 1 ? "conta" : "contas"}`, step: "accounts" as CalculatorStep }] : []),
     ...(product !== "pages" && networks.includes("google") ? [{ label: `${googleEmails} ${googleEmails === 1 ? "e-mail" : "e-mails"}`, step: "googleEmails" as CalculatorStep }] : []),
   ];
 }
@@ -253,7 +258,7 @@ function RecommendedPlanResult({
   product: Product;
   networks: Network[];
   volume: number;
-  accounts: Record<Network, number>;
+  accounts: Record<AccountNetwork, number>;
   googleEmails: number;
   recommended: number;
   onEdit: (step: CalculatorStep) => void;
@@ -264,6 +269,7 @@ function RecommendedPlanResult({
   const semiannualSavings = Math.max(0, Math.round((1 - selectedPrices.semiannualCash[recommended] / (monthlyTotal * 6)) * 100));
   const annualSavings = Math.max(0, Math.round((1 - selectedPrices.annualCash[recommended] / (monthlyTotal * 12)) * 100));
   const summaryItems = getAnswerSummaryItems(product, networks, volume, accounts, googleEmails);
+  const selectedAccountNetworks = networks.filter(supportsAdAccounts);
 
   return (
     <div aria-live="polite">
@@ -290,25 +296,29 @@ function RecommendedPlanResult({
                 <span>Ratoeira Ads</span>
               </div>
               <p className="text-sm leading-6 text-gray-300"><strong className="text-white">{SALES[recommended]}</strong> vendas aprovadas/mês · venda extra a <strong className="text-white">R$ {EXTRA_SALE_RATE[tier][recommended]}</strong></p>
-              <span className="mb-2 mt-4 block text-xs font-bold uppercase tracking-[0.08em] text-gray-400">Contas de anúncio</span>
-              <div className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
-                {networks.map((networkId) => {
-                  const network = NETWORKS.find((item) => item.id === networkId);
-                  if (!network) return null;
-                  return (
-                    <div key={network.id} className="flex items-center justify-between gap-4 border-b border-white/[0.08] pb-2 text-sm">
-                      <span className="flex items-center gap-3 text-gray-300"><Image src={network.logo} alt="" width={network.logoWidth ?? 22} height={22} className="h-[22px] w-auto object-contain" />{network.label}</span>
-                      <strong className="text-white">{formatLimit(NETWORK_ACCOUNT_LIMITS[network.id][recommended])}</strong>
-                    </div>
-                  );
-                })}
-                {networks.includes("google") && (
-                  <div className="flex items-center justify-between gap-4 border-b border-white/[0.08] pb-2 text-sm sm:col-span-2">
-                    <span className="flex items-center gap-3 font-bold uppercase tracking-[0.06em] text-gray-400"><Image src="/icons/pricing/google-ads.webp" alt="" width={22} height={22} className="h-[22px] w-auto object-contain" />E-mails do Google Ads</span>
-                    <strong className="text-white">{formatLimit(GOOGLE_EMAIL_LIMITS[recommended], false)}</strong>
+              {selectedAccountNetworks.length > 0 && (
+                <>
+                  <span className="mb-2 mt-4 block text-xs font-bold uppercase tracking-[0.08em] text-gray-400">Contas de anúncio</span>
+                  <div className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
+                    {selectedAccountNetworks.map((networkId) => {
+                      const network = ACCOUNT_NETWORKS.find((item) => item.id === networkId);
+                      if (!network) return null;
+                      return (
+                        <div key={network.id} className="flex items-center justify-between gap-4 border-b border-white/[0.08] pb-2 text-sm">
+                          <span className="flex items-center gap-3 text-gray-300"><Image src={network.logo} alt="" width={network.logoWidth ?? 22} height={22} className="h-[22px] w-auto object-contain" />{network.label}</span>
+                          <strong className="text-white">{formatLimit(NETWORK_ACCOUNT_LIMITS[network.id][recommended])}</strong>
+                        </div>
+                      );
+                    })}
+                    {networks.includes("google") && (
+                      <div className="flex items-center justify-between gap-4 border-b border-white/[0.08] pb-2 text-sm sm:col-span-2">
+                        <span className="flex items-center gap-3 font-bold uppercase tracking-[0.06em] text-gray-400"><Image src="/icons/pricing/google-ads.webp" alt="" width={22} height={22} className="h-[22px] w-auto object-contain" />E-mails do Google Ads</span>
+                        <strong className="text-white">{formatLimit(GOOGLE_EMAIL_LIMITS[recommended], false)}</strong>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </>
+              )}
             </div>
           )}
 
@@ -332,7 +342,8 @@ function RecommendedPlanResult({
 
 function getCalculatorSteps(product: Product, networks: Network[]): CalculatorStep[] {
   if (product === "pages") return ["product", "volume", "result"];
-  const steps: CalculatorStep[] = ["product", "networks", "volume", "accounts"];
+  const steps: CalculatorStep[] = ["product", "networks", "volume"];
+  if (networks.some(supportsAdAccounts)) steps.push("accounts");
   if (networks.includes("google")) steps.push("googleEmails");
   steps.push("result");
   return steps;
@@ -355,12 +366,12 @@ function CalculatorQuestion({
   product: Product;
   networks: Network[];
   volume: number;
-  accounts: Record<Network, number>;
+  accounts: Record<AccountNetwork, number>;
   googleEmails: number;
   onProductChange: (product: Product) => void;
   onToggleNetwork: (network: Network) => void;
   onVolumeChange: (volume: number) => void;
-  onAccountChange: (network: Network, value: number) => void;
+  onAccountChange: (network: AccountNetwork, value: number) => void;
   onGoogleEmailsChange: (value: number) => void;
 }) {
   const options = product === "pages" ? VISIT_OPTIONS : SALES_OPTIONS;
@@ -420,8 +431,8 @@ function CalculatorQuestion({
         <legend className="text-h4 mb-2 text-white">Quantas contas de anúncio você usa em cada rede?</legend>
         <p className="text-small mb-5 text-gray-400">Se não souber o número exato, use uma estimativa.</p>
         <div className="grid gap-2 sm:grid-cols-2">
-          {networks.map((networkId) => {
-            const network = NETWORKS.find((item) => item.id === networkId);
+          {networks.filter(supportsAdAccounts).map((networkId) => {
+            const network = ACCOUNT_NETWORKS.find((item) => item.id === networkId);
             if (!network) return null;
             return <QuantityControl key={network.id} label={network.label} logo={network.logo} logoWidth={network.logoWidth} value={accounts[network.id]} onChange={(value) => onAccountChange(network.id, value)} />;
           })}
@@ -445,20 +456,18 @@ function PlanCalculator() {
   const [product, setProduct] = useState<Product>("hub");
   const [networks, setNetworks] = useState<Network[]>(["google", "meta"]);
   const [volume, setVolume] = useState(2);
-  const [accounts, setAccounts] = useState<Record<Network, number>>({
+  const [accounts, setAccounts] = useState<Record<AccountNetwork, number>>({
     google: 1,
     meta: 1,
     taboola: 1,
     newsbreak: 1,
-    mgid: 1,
-    tiktok: 1,
   });
   const [googleEmails, setGoogleEmails] = useState(1);
   const [stepIndex, setStepIndex] = useState(0);
 
   const recommended = useMemo(() => {
     const volumeIndex = VOLUME_PLAN[volume] ?? 0;
-    const accountIndex = networks.reduce((highestIndex, network) => {
+    const accountIndex = networks.filter(supportsAdAccounts).reduce((highestIndex, network) => {
       const limits = NETWORK_ACCOUNT_LIMITS[network];
       const matchingIndex = limits.findIndex((limit) => accounts[network] <= limit);
       return Math.max(highestIndex, matchingIndex < 0 ? 3 : matchingIndex);
@@ -478,7 +487,7 @@ function PlanCalculator() {
     });
   };
 
-  const updateAccounts = (network: Network, nextValue: number) => {
+  const updateAccounts = (network: AccountNetwork, nextValue: number) => {
     setAccounts((current) => ({
       ...current,
       [network]: Math.min(999, Math.max(1, nextValue)),
@@ -540,33 +549,141 @@ function PlanCalculator() {
   );
 }
 
-const COMPARE_ROWS = [
-  { label: "Vendas aprovadas por mês", values: SALES },
-  { label: "Tags Ratoeira Automática", values: TAGS },
-  { label: "Integrações e webhooks", values: WEBHOOKS },
-  { label: "Acessos mensais", values: VISITS },
-  { label: "Domínios customizados", values: DOMAINS },
-  { label: "Páginas ilimitadas", values: [true, true, true, true] },
-  { label: "Hospedagem Turbo", values: [true, true, true, true] },
-  { label: "Suporte via WhatsApp", values: [true, true, true, true] },
+type ComparisonValue = string | boolean;
+
+type ComparisonSection = {
+  id: "compare-ads" | "compare-pages" | "compare-hub";
+  label: string;
+  rows: { label: string; values: ComparisonValue[] }[];
+};
+
+const COMPARISON_SECTIONS: ComparisonSection[] = [
+  {
+    id: "compare-ads",
+    label: "Ratoeira Ads",
+    rows: [
+      { label: "Tag Ratoeira Automática", values: TAGS },
+      { label: "Integrações / Webhooks", values: WEBHOOKS },
+      { label: "Perfis/E-mail Google Ads", values: GOOGLE_EMAIL_LIMITS.map((value) => formatLimit(value, false)) },
+      { label: "Vendas aprovadas/mês", values: SALES.map((value) => `Até ${value} *`) },
+      ...ACCOUNT_NETWORKS.map((network) => ({
+        label: `Contas ${network.label}`,
+        values: NETWORK_ACCOUNT_LIMITS[network.id].map((value) => formatLimit(value)),
+      })),
+      { label: "Gerenciador Integrado", values: [true, true, true, true] },
+      { label: "Dashboard Financeiro", values: [true, true, true, true] },
+      { label: "Acesso aos leads", values: [true, true, true, true] },
+      { label: "Analytics Avançado", values: [true, true, true, true] },
+      { label: "Aulas e tutoriais", values: [true, true, true, true] },
+      { label: "Integração com IA (MCP)", values: [true, true, true, true] },
+      { label: "Acesso Beta VIP à novas funcionalidades", values: [true, true, true, true] },
+      { label: "Acesso a todos os eventos", values: [true, true, true, true] },
+      { label: "Acesso às vendas com detalhes", values: [true, true, true, true] },
+      { label: "Acesso à todas as visitas", values: [true, true, true, true] },
+      { label: "Suporte WhatsApp", values: [true, true, true, true] },
+    ],
+  },
+  {
+    id: "compare-pages",
+    label: "Ratoeira Pages",
+    rows: [
+      { label: "Acessos mensais", values: PAGE_VISITS },
+      { label: "Domínios customizados", values: DOMAINS },
+      { label: "Páginas", values: ["Ilimitadas", "Ilimitadas", "Ilimitadas", "Ilimitadas"] },
+      { label: "Hospedagem Turbo", values: ["Ilimitada", "Ilimitada", "Ilimitada", "Ilimitada"] },
+      { label: "Construtor de página intuitivo", values: [true, true, true, true] },
+      { label: "Analytics Avançado", values: [true, true, true, true] },
+      { label: "Templates Exclusivos", values: [true, true, true, true] },
+      { label: "Aulas e tutoriais", values: [true, true, true, true] },
+      { label: "Clonador de páginas", values: [true, true, true, true] },
+      { label: "Integração com IA (MCP)", values: [true, true, true, true] },
+      { label: "Conexão com IA", values: [true, true, true, true] },
+      { label: "Acesso Beta VIP à novas funcionalidades", values: [true, true, true, true] },
+      { label: "Suporte WhatsApp", values: [true, true, true, true] },
+    ],
+  },
+  {
+    id: "compare-hub",
+    label: "Ratoeira Hub",
+    rows: [
+      { label: "Tudo acima de Ads e Pages", values: [true, true, true, true] },
+      { label: "Maior performance", values: [true, true, true, true] },
+      { label: "Segurança reforçada", values: [true, true, true, true] },
+      { label: "Maior economia", values: [true, true, true, true] },
+      { label: "Maior taxa de rastreamento", values: [true, true, true, true] },
+      { label: "Login unificado", values: [true, true, true, true] },
+    ],
+  },
 ];
 
 function ComparisonTable() {
-  const [open, setOpen] = useState(true);
+  const [collapsed, setCollapsed] = useState<Record<ComparisonSection["id"], boolean>>({
+    "compare-ads": true,
+    "compare-pages": true,
+    "compare-hub": true,
+  });
+
+  const renderComparisonValue = (value: ComparisonValue) => {
+    if (value === true) return <Check className="mx-auto h-5 w-5 text-brand-primary" aria-label="Incluído" />;
+    if (typeof value === "string" && /^ilimitad/i.test(value)) return <span className="inline-flex rounded-badge border border-white/10 bg-white/[0.05] px-2 py-0.5 text-xs font-semibold text-white">{value}</span>;
+    return value;
+  };
+
   return (
     <section id="comparacao" className="scroll-mt-24 bg-[#0d0d0d] px-4 py-16 sm:px-6 md:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionTitle description="Compare os limites essenciais de cada plano antes de escolher.">Compare plano por plano</SectionTitle>
-        <div className="overflow-hidden rounded-card border border-white/[0.08] bg-[#111] shadow-card-resting">
-          <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} className="text-h4 flex min-h-14 w-full items-center justify-between px-5 py-4 text-left text-white transition-colors hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-secondary sm:px-6">Recursos e limites <ChevronDown className={cn("h-5 w-5 text-brand-primary transition-transform", open && "rotate-180")} /></button>
-          {open && (
-            <div className="overflow-x-auto">
-              <table className="text-small w-full min-w-[760px] border-collapse">
-                <thead><tr className="border-t border-white/10 bg-black/20"><th className="sticky left-0 z-10 bg-[#0d0d0d] px-5 py-4 text-left text-[#aaa] sm:px-6">Recurso</th>{PLAN_NAMES.map((name) => <th key={name} className="px-4 py-4 text-center text-white">{name}</th>)}</tr></thead>
-                <tbody>{COMPARE_ROWS.map((row) => <tr key={row.label} className="border-t border-white/[0.07] hover:bg-white/[0.025]"><th scope="row" className="sticky left-0 z-10 bg-[#111] px-5 py-4 text-left font-medium text-gray-300 sm:px-6">{row.label}</th>{row.values.map((value, index) => <td key={`${row.label}-${index}`} className="px-4 py-4 text-center text-gray-200">{value === true ? <Check className="mx-auto h-5 w-5 text-brand-primary" /> : value}</td>)}</tr>)}</tbody>
-              </table>
-            </div>
-          )}
+        <div className="overflow-x-auto rounded-card border border-white/[0.08] bg-[#111] shadow-card-resting">
+          <table className="text-small w-full min-w-[860px] border-separate border-spacing-0">
+            <colgroup>
+              <col className="w-[36%]" />
+              {PLAN_NAMES.map((name) => <col key={name} className="w-[16%]" />)}
+            </colgroup>
+            <thead className="sticky top-0 z-20">
+              <tr>
+                <th className="sticky left-0 z-30 border-b border-white/[0.08] bg-[#0d0d0d] px-5 py-4 text-left text-xs font-bold uppercase tracking-[0.08em] text-gray-400 sm:px-6">Recursos</th>
+                {PLAN_NAMES.map((name) => <th key={name} className="border-b border-white/[0.08] bg-[#0d0d0d] px-4 py-4 text-center text-xs font-bold uppercase tracking-[0.08em] text-white">{name}</th>)}
+              </tr>
+            </thead>
+            {COMPARISON_SECTIONS.map((section) => {
+              const isCollapsed = collapsed[section.id];
+              return (
+                <tbody key={section.id} id={section.id}>
+                  <tr>
+                    <th colSpan={PLAN_NAMES.length + 1} scope="rowgroup" className="border-b border-white/[0.06] p-0 text-left">
+                      <button
+                        type="button"
+                        aria-expanded={!isCollapsed}
+                        aria-controls={`${section.id}-rows`}
+                        onClick={() => setCollapsed((current) => ({ ...current, [section.id]: !current[section.id] }))}
+                        className="my-1 flex min-h-14 w-full items-center rounded-input bg-white/[0.045] px-5 text-left text-sm font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-secondary sm:px-6"
+                      >
+                        {section.label}
+                        <span className="sr-only"> — {isCollapsed ? "expandir recursos" : "recolher recursos"}</span>
+                      </button>
+                    </th>
+                  </tr>
+                  {!isCollapsed && section.rows.map((row, rowIndex) => (
+                    <tr key={row.label} id={rowIndex === 0 ? `${section.id}-rows` : undefined} className="transition-colors hover:bg-white/[0.025]">
+                      <th scope="row" className="sticky left-0 z-10 border-b border-white/[0.07] bg-[#111] px-5 py-4 text-left font-medium text-gray-300 sm:px-6">
+                        {row.label === "Gerenciador Integrado" ? (
+                          <span className="flex items-center gap-4">
+                            <span>{row.label}</span>
+                            <span className="flex items-center gap-3" aria-label="Google Ads, Meta Ads, Taboola e NewsBreak">
+                              {ACCOUNT_NETWORKS.map((network) => (
+                                <Image key={network.id} src={network.logo} alt={network.label} width={20} height={20} className="h-5 w-auto object-contain" />
+                              ))}
+                            </span>
+                          </span>
+                        ) : row.label}
+                      </th>
+                      {row.values.map((value, index) => <td key={`${row.label}-${PLAN_NAMES[index]}`} className="border-b border-white/[0.07] px-4 py-4 text-center text-gray-200">{renderComparisonValue(value)}</td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              );
+            })}
+          </table>
         </div>
       </div>
     </section>
@@ -610,7 +727,7 @@ function PricingCardDetails({ product, index, networkCount, tier }: { product: P
 
           <span className="mb-2 mt-4 block text-[11px] font-black uppercase tracking-[0.08em] text-gray-400">Contas de anúncio por rede</span>
           <div className="space-y-1.5">
-            {NETWORKS.map((network) => (
+            {ACCOUNT_NETWORKS.map((network) => (
               <div key={network.id} className="flex items-center justify-between gap-3 text-xs leading-5">
                 <span className="flex items-center gap-2 font-semibold text-gray-200">
                   <span className="flex h-5 w-6 shrink-0 items-center justify-center"><Image src={network.logo} alt="" width={network.logoWidth ?? 20} height={20} className="max-h-5 w-auto object-contain" /></span>
@@ -642,7 +759,7 @@ function PricingCardDetails({ product, index, networkCount, tier }: { product: P
 function PricingCards() {
   const [product, setProduct] = useState<Product>("hub");
   const [billing, setBilling] = useState<Billing>("annual");
-  const [networkCount, setNetworkCount] = useState<1 | 2 | 6>(2);
+  const [networkCount, setNetworkCount] = useState<1 | 2 | 6>(1);
   const tier = networkTier(networkCount);
   const prices = PRICES[product][tier][billing];
 
