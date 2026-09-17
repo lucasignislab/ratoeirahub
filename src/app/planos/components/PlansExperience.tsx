@@ -208,6 +208,39 @@ function formatLimit(value: number, feminine = true): string {
   return String(value);
 }
 
+type SummaryItem = { label: string; step: CalculatorStep };
+
+function getAnswerSummaryItems(
+  product: Product,
+  networks: Network[],
+  volume: number,
+  accounts: Record<Network, number>,
+  googleEmails: number,
+): SummaryItem[] {
+  const options = product === "pages" ? VISIT_OPTIONS : SALES_OPTIONS;
+  const highestAccountCount = Math.max(...networks.map((network) => accounts[network]));
+
+  return [
+    { label: PRODUCT_LABELS[product], step: "product" },
+    ...(product !== "pages" ? [{ label: networks.map((id) => NETWORKS.find((network) => network.id === id)?.label).join(", "), step: "networks" as CalculatorStep }] : []),
+    { label: options[volume], step: "volume" },
+    ...(product !== "pages" ? [{ label: `${highestAccountCount} ${highestAccountCount === 1 ? "conta" : "contas"}`, step: "accounts" as CalculatorStep }] : []),
+    ...(product !== "pages" && networks.includes("google") ? [{ label: `${googleEmails} ${googleEmails === 1 ? "e-mail" : "e-mails"}`, step: "googleEmails" as CalculatorStep }] : []),
+  ];
+}
+
+function AnswerSummary({ items, onEdit, className }: { items: SummaryItem[]; onEdit: (step: CalculatorStep) => void; className?: string }) {
+  return (
+    <div className={cn("flex flex-wrap gap-2", className)}>
+      {items.map((item) => (
+        <button key={item.step} type="button" onClick={() => onEdit(item.step)} className="group rounded-badge border border-white/10 bg-white/[0.05] px-3 py-1.5 text-small font-semibold text-white transition-colors hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
+          {item.label} <span className="ml-1 text-gray-400 transition-colors group-hover:text-white">editar</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function RecommendedPlanResult({
   product,
   networks,
@@ -225,67 +258,53 @@ function RecommendedPlanResult({
   recommended: number;
   onEdit: (step: CalculatorStep) => void;
 }) {
-  const options = product === "pages" ? VISIT_OPTIONS : SALES_OPTIONS;
   const tier = networkTier(networks.length);
   const selectedPrices = PRICES[product][tier];
   const monthlyTotal = selectedPrices.monthly[recommended];
   const semiannualSavings = Math.max(0, Math.round((1 - selectedPrices.semiannualCash[recommended] / (monthlyTotal * 6)) * 100));
   const annualSavings = Math.max(0, Math.round((1 - selectedPrices.annualCash[recommended] / (monthlyTotal * 12)) * 100));
-  const highestAccountCount = Math.max(...networks.map((network) => accounts[network]));
-  const summaryItems: { label: string; step: CalculatorStep }[] = [
-    { label: PRODUCT_LABELS[product], step: "product" },
-    ...(product !== "pages" ? [{ label: networks.map((id) => NETWORKS.find((network) => network.id === id)?.label).join(", "), step: "networks" as CalculatorStep }] : []),
-    { label: options[volume], step: "volume" },
-    ...(product !== "pages" ? [{ label: `${highestAccountCount} ${highestAccountCount === 1 ? "conta" : "contas"}`, step: "accounts" as CalculatorStep }] : []),
-    ...(product !== "pages" && networks.includes("google") ? [{ label: `${googleEmails} ${googleEmails === 1 ? "e-mail" : "e-mails"}`, step: "googleEmails" as CalculatorStep }] : []),
-  ];
+  const summaryItems = getAnswerSummaryItems(product, networks, volume, accounts, googleEmails);
 
   return (
     <div aria-live="polite">
-      <div className="mb-2 flex flex-wrap gap-2">
-        {summaryItems.map((item) => (
-          <button key={item.step} type="button" onClick={() => onEdit(item.step)} className="group rounded-badge border border-white/10 bg-white/[0.05] px-3 py-1.5 text-small font-semibold text-white transition-colors hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
-            {item.label} <span className="ml-1 text-gray-400 transition-colors group-hover:text-white">editar</span>
-          </button>
-        ))}
-      </div>
+      <AnswerSummary items={summaryItems} onEdit={onEdit} className="mb-2" />
 
-      <div className="rounded-card border border-brand-primary/70 bg-[#111] p-3 sm:p-4">
+      <div className="rounded-card border border-brand-primary/70 bg-[#111] p-5 sm:p-6">
         <span className="rounded-badge bg-brand-primary px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-black">Plano indicado para você</span>
-        <h3 className="text-h4 mt-2 text-white">{PRODUCT_LABELS[product]} {PLAN_NAMES[recommended]}</h3>
-        <p className="mt-1 max-w-none text-xs text-gray-300">{PRODUCT_DESCRIPTIONS[product][recommended]} A configuração abaixo já considera o seu volume, as redes escolhidas e os limites informados.</p>
+        <h3 className="text-h4 mt-3 text-white">{PRODUCT_LABELS[product]} {PLAN_NAMES[recommended]}</h3>
+        <p className="mt-2 max-w-none text-sm text-gray-300">{PRODUCT_DESCRIPTIONS[product][recommended]} A configuração abaixo já considera o seu volume, as redes escolhidas e os limites informados.</p>
 
-        <div className="mt-2 grid gap-3 lg:grid-cols-3">
+        <div className="mt-4 grid gap-4 lg:grid-cols-3">
           <ResultPriceCard label="Mensal" price={selectedPrices.monthly[recommended]} />
           <ResultPriceCard label="Semestral" installment="6x" price={selectedPrices.semiannual[recommended]} cashPrice={selectedPrices.semiannualCash[recommended]} savings={semiannualSavings} />
           <ResultPriceCard label="Anual" installment="12x" price={selectedPrices.annual[recommended]} cashPrice={selectedPrices.annualCash[recommended]} savings={annualSavings} featured />
         </div>
 
-        <p className="mt-2 text-center text-xs text-brand-primary">Economia calculada sobre o pagamento mensal. Valores sujeitos a reajuste.</p>
+        <p className="mt-3 text-center text-xs text-brand-primary">Economia calculada sobre o pagamento mensal. Valores sujeitos a reajuste.</p>
 
-        <div className={cn("mt-2 grid gap-3 border-t border-white/10 pt-2", product === "hub" && "lg:grid-cols-2")}>
+        <div className={cn("mt-4 grid gap-8 border-t border-white/10 pt-4", product === "hub" && "lg:grid-cols-2")}>
           {product !== "pages" && (
             <div className="min-w-0">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-gray-400">
-                <Image src="/logoraads2.png" alt="" width={20} height={20} className="h-5 w-5 object-contain" />
+              <div className="mb-3 flex items-center gap-3 text-sm font-bold uppercase tracking-[0.08em] text-gray-400">
+                <Image src="/logoraads2.png" alt="" width={24} height={24} className="h-6 w-6 object-contain" />
                 <span>Ratoeira Ads</span>
               </div>
-              <p className="mt-1 text-xs text-gray-300"><strong className="text-white">{SALES[recommended]}</strong> vendas aprovadas/mês · venda extra a <strong className="text-white">R$ {EXTRA_SALE_RATE[tier][recommended]}</strong></p>
-              <span className="mt-2 block text-xs font-bold uppercase tracking-[0.08em] text-gray-400">Contas de anúncio</span>
-              <div className="mt-1 grid gap-1 sm:grid-cols-2">
+              <p className="text-sm leading-6 text-gray-300"><strong className="text-white">{SALES[recommended]}</strong> vendas aprovadas/mês · venda extra a <strong className="text-white">R$ {EXTRA_SALE_RATE[tier][recommended]}</strong></p>
+              <span className="mb-2 mt-4 block text-xs font-bold uppercase tracking-[0.08em] text-gray-400">Contas de anúncio</span>
+              <div className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
                 {networks.map((networkId) => {
                   const network = NETWORKS.find((item) => item.id === networkId);
                   if (!network) return null;
                   return (
-                    <div key={network.id} className="flex items-center justify-between gap-3 border-b border-white/[0.08] pb-1 text-xs">
-                      <span className="flex items-center gap-2 text-gray-300"><Image src={network.logo} alt="" width={network.logoWidth ?? 20} height={20} className="h-5 w-auto object-contain" />{network.label}</span>
+                    <div key={network.id} className="flex items-center justify-between gap-4 border-b border-white/[0.08] pb-2 text-sm">
+                      <span className="flex items-center gap-3 text-gray-300"><Image src={network.logo} alt="" width={network.logoWidth ?? 22} height={22} className="h-[22px] w-auto object-contain" />{network.label}</span>
                       <strong className="text-white">{formatLimit(NETWORK_ACCOUNT_LIMITS[network.id][recommended])}</strong>
                     </div>
                   );
                 })}
                 {networks.includes("google") && (
-                  <div className="flex items-center justify-between gap-3 border-b border-white/[0.08] pb-1 text-xs sm:col-span-2">
-                    <span className="flex items-center gap-2 font-bold uppercase tracking-[0.06em] text-gray-400"><Image src="/icons/pricing/google-ads.webp" alt="" width={20} height={20} className="h-5 w-auto object-contain" />E-mails do Google Ads</span>
+                  <div className="flex items-center justify-between gap-4 border-b border-white/[0.08] pb-2 text-sm sm:col-span-2">
+                    <span className="flex items-center gap-3 font-bold uppercase tracking-[0.06em] text-gray-400"><Image src="/icons/pricing/google-ads.webp" alt="" width={22} height={22} className="h-[22px] w-auto object-contain" />E-mails do Google Ads</span>
                     <strong className="text-white">{formatLimit(GOOGLE_EMAIL_LIMITS[recommended], false)}</strong>
                   </div>
                 )}
@@ -295,12 +314,14 @@ function RecommendedPlanResult({
 
           {product !== "ads" && (
             <div className="min-w-0">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-gray-400">
-                <Image src="/logopages2.png" alt="" width={20} height={20} className="h-5 w-5 object-contain" />
+              <div className="mb-3 flex items-center gap-3 text-sm font-bold uppercase tracking-[0.08em] text-gray-400">
+                <Image src="/logopages2.png" alt="" width={24} height={24} className="h-6 w-6 object-contain" />
                 <span>Ratoeira Pages</span>
               </div>
-              <p className="mt-1 text-xs text-gray-300"><strong className="text-white">{PAGE_VISITS[recommended]}</strong> acessos por mês · páginas e hospedagem ilimitadas</p>
-              <p className="mt-1 text-xs text-gray-300"><strong className="text-white">{DOMAINS[recommended]}</strong> domínios customizados</p>
+              <div className="space-y-2 text-sm leading-6 text-gray-300">
+                <p><strong className="text-white">{PAGE_VISITS[recommended]}</strong> acessos por mês · páginas e hospedagem ilimitadas</p>
+                <p><strong className="text-white">{DOMAINS[recommended]}</strong> domínios customizados</p>
+              </div>
             </div>
           )}
         </div>
@@ -467,6 +488,8 @@ function PlanCalculator() {
   const steps = getCalculatorSteps(product, networks);
   const safeStepIndex = Math.min(stepIndex, steps.length - 1);
   const activeStep = steps[safeStepIndex];
+  const completedSummaryItems = getAnswerSummaryItems(product, networks, volume, accounts, googleEmails)
+    .filter((item) => steps.indexOf(item.step) < safeStepIndex);
   const goToStep = (step: CalculatorStep) => {
     const nextIndex = steps.indexOf(step);
     if (nextIndex >= 0) setStepIndex(nextIndex);
@@ -489,19 +512,22 @@ function PlanCalculator() {
             <RecommendedPlanResult product={product} networks={networks} volume={volume} accounts={accounts} googleEmails={googleEmails} recommended={recommended} onEdit={goToStep} />
           ) : (
             <div className="flex min-h-72 flex-col justify-between">
-              <CalculatorQuestion
-                step={activeStep}
-                product={product}
-                networks={networks}
-                volume={volume}
-                accounts={accounts}
-                googleEmails={googleEmails}
-                onProductChange={setProduct}
-                onToggleNetwork={toggleNetwork}
-                onVolumeChange={setVolume}
-                onAccountChange={updateAccounts}
-                onGoogleEmailsChange={setGoogleEmails}
-              />
+              <div>
+                {completedSummaryItems.length > 0 && <AnswerSummary items={completedSummaryItems} onEdit={goToStep} className="mb-5" />}
+                <CalculatorQuestion
+                  step={activeStep}
+                  product={product}
+                  networks={networks}
+                  volume={volume}
+                  accounts={accounts}
+                  googleEmails={googleEmails}
+                  onProductChange={setProduct}
+                  onToggleNetwork={toggleNetwork}
+                  onVolumeChange={setVolume}
+                  onAccountChange={updateAccounts}
+                  onGoogleEmailsChange={setGoogleEmails}
+                />
+              </div>
               <div className="mt-7 flex items-center justify-between border-t border-white/[0.08] pt-5">
                 <Button type="button" variant="ghost" disabled={safeStepIndex === 0} onClick={() => setStepIndex((current) => Math.max(0, current - 1))}>Voltar</Button>
                 <Button type="button" onClick={() => setStepIndex((current) => Math.min(steps.length - 1, current + 1))}>Continuar</Button>
@@ -544,6 +570,72 @@ function ComparisonTable() {
         </div>
       </div>
     </section>
+  );
+}
+
+function PlanDetailRow({ label, value }: { label: string; value: React.ReactNode }) {
+  const isUnlimited = typeof value === "string" && value.toLowerCase().startsWith("ilimitad");
+  return (
+    <div className="flex items-center justify-between gap-3 text-xs leading-5 text-gray-300">
+      <span>{label}</span>
+      <strong className={cn("shrink-0 text-right text-white", isUnlimited && "rounded-badge bg-white/10 px-2 py-0.5 text-[11px]")}>{value}</strong>
+    </div>
+  );
+}
+
+function PlanProductHeading({ product }: { product: "ads" | "pages" }) {
+  const isAds = product === "ads";
+  return (
+    <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.08em] text-gray-400">
+      <Image src={isAds ? "/logoraads2.png" : "/logopages2.png"} alt="" width={20} height={20} className="h-5 w-5 object-contain" />
+      <span>{isAds ? "Ratoeira Ads" : "Ratoeira Pages"}</span>
+    </div>
+  );
+}
+
+function PricingCardDetails({ product, index, networkCount, tier }: { product: Product; index: number; networkCount: 1 | 2 | 6; tier: "one" | "two" | "all" }) {
+  return (
+    <div className="space-y-5 border-t border-white/[0.08] pt-5">
+      {product !== "pages" && (
+        <div>
+          <PlanProductHeading product="ads" />
+          <div className="space-y-1.5">
+            <PlanDetailRow label="Redes simultâneas" value={networkCount === 6 ? "Todas" : networkCount} />
+            <PlanDetailRow label="Vendas aprovadas/mês" value={SALES[index]} />
+            <PlanDetailRow label="Venda extra aprovada" value={`R$ ${EXTRA_SALE_RATE[tier][index]}`} />
+            <PlanDetailRow label="Tag Ratoeira Automática" value={TAGS[index]} />
+            <PlanDetailRow label="Integrações / Webhooks" value={WEBHOOKS[index]} />
+            <PlanDetailRow label="E-mails do Google Ads" value={formatLimit(GOOGLE_EMAIL_LIMITS[index], false)} />
+          </div>
+
+          <span className="mb-2 mt-4 block text-[11px] font-black uppercase tracking-[0.08em] text-gray-400">Contas de anúncio por rede</span>
+          <div className="space-y-1.5">
+            {NETWORKS.map((network) => (
+              <div key={network.id} className="flex items-center justify-between gap-3 text-xs leading-5">
+                <span className="flex items-center gap-2 font-semibold text-gray-200">
+                  <span className="flex h-5 w-6 shrink-0 items-center justify-center"><Image src={network.logo} alt="" width={network.logoWidth ?? 20} height={20} className="max-h-5 w-auto object-contain" /></span>
+                  {network.label}
+                </span>
+                <strong className={cn("shrink-0 text-white", NETWORK_ACCOUNT_LIMITS[network.id][index] >= 999 && "rounded-badge bg-white/10 px-2 py-0.5 text-[11px]")}>{formatLimit(NETWORK_ACCOUNT_LIMITS[network.id][index])}</strong>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {product !== "ads" && (
+        <div>
+          <PlanProductHeading product="pages" />
+          <div className="space-y-1.5">
+            <PlanDetailRow label="Acessos mensais" value={PAGE_VISITS[index]} />
+            <PlanDetailRow label="Domínios customizados" value={DOMAINS[index]} />
+            <PlanDetailRow label="Páginas" value="Ilimitadas" />
+            <PlanDetailRow label="Hospedagem Turbo" value="Ilimitada" />
+            <PlanDetailRow label="Conexão com IA" value={<Check className="h-4 w-4 text-white" />} />
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -617,22 +709,30 @@ function PricingCards() {
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {PLAN_NAMES.map((name, index) => {
             const featured = index === 1;
+            const unlimited = index === PLAN_NAMES.length - 1;
+            const selectedPriceSet = PRICES[product][tier];
+            const monthlyTotal = selectedPriceSet.monthly[index];
+            const cashPrice = billing === "annual" ? selectedPriceSet.annualCash[index] : billing === "semiannual" ? selectedPriceSet.semiannualCash[index] : undefined;
+            const months = billing === "annual" ? 12 : billing === "semiannual" ? 6 : 1;
+            const savings = cashPrice ? Math.max(0, Math.round((1 - cashPrice / (monthlyTotal * months)) * 100)) : 0;
+            const installment = billing === "annual" ? "12x" : billing === "semiannual" ? "6x" : null;
             return (
-              <article key={name} className={cn("relative flex min-h-[500px] flex-col rounded-card border border-white/[0.08] bg-[#111] p-6 shadow-card-resting transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-white/15 hover:shadow-card-hover sm:p-8", featured && "border-brand-primary/70 ring-1 ring-brand-primary/70")}>
+              <article key={name} className={cn("relative flex min-h-[760px] flex-col rounded-card border border-white/[0.12] bg-[#111] p-5 shadow-card-resting transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-white/20 hover:shadow-card-hover", featured && "border-brand-primary/80 ring-1 ring-brand-primary/70", unlimited && "border-emerald-500/80 ring-1 ring-emerald-500/60")}>
                 {featured && <span className="text-body-badge absolute -top-3 left-5 rounded-badge bg-brand-primary px-3 py-1 font-bold uppercase tracking-[0.08em] text-text-primary">Mais escolhido</span>}
+                {unlimited && <span className="text-body-badge absolute -top-3 right-5 rounded-badge bg-emerald-500 px-3 py-1 font-bold uppercase tracking-[0.08em] text-black">Sem limites</span>}
                 <h3 className="text-h3 text-white">{name}</h3>
                 <p className="text-small mt-2 min-h-12 text-gray-400">{PRODUCT_DESCRIPTIONS[product][index]}</p>
-                <div className="mt-6 flex items-end gap-1 tabular-nums"><span className="mb-1 text-sm text-[#aaa]">R$</span><span className="text-4xl font-black tracking-[-0.04em] text-white">{currency.format(prices[index])}</span><span className="mb-1 text-sm text-[#888]">/mês</span></div>
-                {billing === "annual" && <p className="mt-2 text-xs text-[#888]">ou R$ {currency.format(PRICES[product][tier].annualCash[index])} à vista</p>}
-                <div className="my-6 h-px bg-white/[0.08]" />
-                <ul className="space-y-3 text-sm text-[#ccc]">
-                  <li className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />{product === "pages" ? `${VISITS[index]} acessos mensais` : `${SALES[index]} vendas aprovadas/mês`}</li>
-                  <li className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />{TAGS[index]} tags automáticas</li>
-                  <li className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />{WEBHOOKS[index]} integrações e webhooks</li>
-                  {product !== "ads" && <li className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />{DOMAINS[index]} domínios customizados</li>}
-                </ul>
+                <div className="mt-5 min-h-28 tabular-nums">
+                  {installment && <span className="text-sm font-black uppercase text-brand-primary">{installment}</span>}
+                  <div className="flex items-end gap-1"><span className="mb-1 text-sm text-gray-400">R$</span><span className="text-4xl font-black tracking-[-0.04em] text-white">{currency.format(prices[index])}</span><span className="mb-1 text-sm text-gray-400">/mês</span></div>
+                  {cashPrice ? <p className="mt-1 text-sm text-gray-300">ou <strong className="text-white">R$ {currency.format(cashPrice)}</strong> à vista</p> : <p className="mt-1 text-sm text-gray-400">Cobrança mensal</p>}
+                  {savings > 0 && <span className="mt-3 block rounded-badge border border-emerald-500/50 bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-300">Economize {savings}% pagando à vista</span>}
+                </div>
+
+                <PricingCardDetails product={product} index={index} networkCount={networkCount} tier={tier} />
                 <div className="flex-1" />
-                <Button type="button" variant={featured ? "default" : "outline"} size="lg" disabled title="O link de checkout será configurado na próxima etapa" className="mt-8 w-full">Checkout em configuração</Button>
+                <Button type="button" variant={featured ? "default" : "outline"} size="lg" disabled title="O link de checkout será configurado na próxima etapa" className={cn("mt-6 w-full disabled:opacity-100", unlimited && "border-emerald-500 bg-emerald-500 text-black")}>Assinar {name}</Button>
+                <p className="mt-3 text-center text-xs text-gray-500">{billing === "annual" ? "12x sem juros ou à vista com desconto" : billing === "semiannual" ? "6x sem juros ou à vista com desconto" : "Cobrança mensal"}</p>
               </article>
             );
           })}
