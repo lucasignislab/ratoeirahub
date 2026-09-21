@@ -463,7 +463,7 @@ function CalculatorQuestion({
 
 function PlanCalculator() {
   const [product, setProduct] = useState<Product>("hub");
-  const [networks, setNetworks] = useState<Network[]>(["google", "meta"]);
+  const [networks, setNetworks] = useState<Network[]>([]);
   const [volume, setVolume] = useState(2);
   const [accounts, setAccounts] = useState<Record<AccountNetwork, number>>({
     google: 1,
@@ -490,7 +490,7 @@ function PlanCalculator() {
   const toggleNetwork = (network: Network) => {
     setNetworks((current) => {
       if (current.includes(network)) {
-        return current.length === 1 ? current : current.filter((item) => item !== network);
+        return current.filter((item) => item !== network);
       }
       return [...current, network];
     });
@@ -548,7 +548,7 @@ function PlanCalculator() {
               </div>
               <div className="mt-7 grid grid-cols-2 gap-3 border-t border-white/[0.08] pt-5">
                 <Button type="button" variant="ghost" className="min-h-11 w-full" disabled={safeStepIndex === 0} onClick={() => setStepIndex((current) => Math.max(0, current - 1))}>Voltar</Button>
-                <Button type="button" className="min-h-11 w-full" onClick={() => setStepIndex((current) => Math.min(steps.length - 1, current + 1))}>Continuar</Button>
+                <Button type="button" className="min-h-11 w-full" disabled={activeStep === "networks" && networks.length === 0} onClick={() => setStepIndex((current) => Math.min(steps.length - 1, current + 1))}>Continuar</Button>
               </div>
             </div>
           )}
