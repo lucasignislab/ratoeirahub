@@ -223,7 +223,7 @@ type SummaryItem = { label: string; step: CalculatorStep };
 function getAnswerSummaryItems(
   product: Product,
   networks: Network[],
-  volume: number,
+  volume: number | null,
   accounts: Record<AccountNetwork, number>,
   googleEmails: number,
 ): SummaryItem[] {
@@ -234,7 +234,7 @@ function getAnswerSummaryItems(
   return [
     { label: PRODUCT_LABELS[product], step: "product" },
     ...(product !== "pages" ? [{ label: networks.map((id) => NETWORKS.find((network) => network.id === id)?.label).join(", "), step: "networks" as CalculatorStep }] : []),
-    { label: options[volume], step: "volume" },
+    ...(volume !== null ? [{ label: options[volume], step: "volume" as CalculatorStep }] : []),
     ...(product !== "pages" && accountNetworks.length > 0 ? [{ label: `${highestAccountCount} ${highestAccountCount === 1 ? "conta" : "contas"}`, step: "accounts" as CalculatorStep }] : []),
     ...(product !== "pages" && networks.includes("google") ? [{ label: `${googleEmails} ${googleEmails === 1 ? "e-mail" : "e-mails"}`, step: "googleEmails" as CalculatorStep }] : []),
   ];
@@ -371,7 +371,7 @@ function CalculatorQuestion({
   step: CalculatorStep;
   product: Product;
   networks: Network[];
-  volume: number;
+  volume: number | null;
   accounts: Record<AccountNetwork, number>;
   googleEmails: number;
   onProductChange: (product: Product) => void;
@@ -464,7 +464,7 @@ function CalculatorQuestion({
 function PlanCalculator() {
   const [product, setProduct] = useState<Product>("hub");
   const [networks, setNetworks] = useState<Network[]>([]);
-  const [volume, setVolume] = useState(2);
+  const [volume, setVolume] = useState<number | null>(null);
   const [accounts, setAccounts] = useState<Record<AccountNetwork, number>>({
     google: 1,
     meta: 1,
@@ -475,7 +475,7 @@ function PlanCalculator() {
   const [stepIndex, setStepIndex] = useState(0);
 
   const recommended = useMemo(() => {
-    const volumeIndex = VOLUME_PLAN[volume] ?? 0;
+    const volumeIndex = volume === null ? 0 : VOLUME_PLAN[volume] ?? 0;
     const accountIndex = networks.filter(supportsAdAccounts).reduce((highestIndex, network) => {
       const limits = NETWORK_ACCOUNT_LIMITS[network];
       const matchingIndex = limits.findIndex((limit) => accounts[network] <= limit);
@@ -504,7 +504,7 @@ function PlanCalculator() {
   };
 
   const steps = getCalculatorSteps(product, networks);
-  const safeStepIndex = Math.min(stepIndex, steps.length - 1);
+  const safeStepIndex = Math.min(stepIndex, volume === null ? steps.indexOf("volume") : steps.length - 1);
   const activeStep = steps[safeStepIndex];
   const completedSummaryItems = getAnswerSummaryItems(product, networks, volume, accounts, googleEmails)
     .filter((item) => steps.indexOf(item.step) < safeStepIndex);
@@ -526,7 +526,7 @@ function PlanCalculator() {
             <div className="h-full rounded-badge bg-brand-primary transition-[width] duration-300" style={{ width: `${((safeStepIndex + 1) / steps.length) * 100}%` }} />
           </div>
 
-          {activeStep === "result" ? (
+          {activeStep === "result" && volume !== null ? (
             <RecommendedPlanResult product={product} networks={networks} volume={volume} accounts={accounts} googleEmails={googleEmails} recommended={recommended} onEdit={goToStep} />
           ) : (
             <div className="flex min-h-72 flex-col justify-between">
@@ -548,7 +548,7 @@ function PlanCalculator() {
               </div>
               <div className="mt-7 grid grid-cols-2 gap-3 border-t border-white/[0.08] pt-5">
                 <Button type="button" variant="ghost" className="min-h-11 w-full" disabled={safeStepIndex === 0} onClick={() => setStepIndex((current) => Math.max(0, current - 1))}>Voltar</Button>
-                <Button type="button" className="min-h-11 w-full" disabled={activeStep === "networks" && networks.length === 0} onClick={() => setStepIndex((current) => Math.min(steps.length - 1, current + 1))}>Continuar</Button>
+                <Button type="button" className="min-h-11 w-full" disabled={(activeStep === "networks" && networks.length === 0) || (activeStep === "volume" && volume === null)} onClick={() => setStepIndex((current) => Math.min(steps.length - 1, current + 1))}>Continuar</Button>
               </div>
             </div>
           )}
