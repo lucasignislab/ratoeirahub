@@ -34,6 +34,12 @@ const PRODUCT_LABELS: Record<Product, string> = {
   hub: "Ratoeira Hub",
 };
 
+const PRODUCT_CHOICE_DESCRIPTIONS: Record<Product, string> = {
+  ads: "Trackear minhas campanhas",
+  pages: "Criar minhas páginas",
+  hub: "As duas coisas",
+};
+
 const PRODUCT_LOGOS: Record<Product, { src: string; width: number }> = {
   ads: { src: "/logoraads2.png", width: 24 },
   pages: { src: "/logopages2.png", width: 24 },
@@ -383,7 +389,10 @@ function CalculatorQuestion({
         <p className="text-small mb-5 text-gray-400">Escolha o produto que melhor representa sua operação.</p>
         <div className="grid gap-2 sm:grid-cols-3">
           {(["ads", "pages", "hub"] as Product[]).map((item) => (
-            <ChoiceButton key={item} active={product === item} onClick={() => onProductChange(item)}>{PRODUCT_LABELS[item]}</ChoiceButton>
+            <ChoiceButton key={item} active={product === item} onClick={() => onProductChange(item)}>
+              <span className="block font-semibold">{PRODUCT_LABELS[item]}</span>
+              <span className="mt-1 block text-sm font-normal opacity-75">{PRODUCT_CHOICE_DESCRIPTIONS[item]}</span>
+            </ChoiceButton>
           ))}
         </div>
       </fieldset>
