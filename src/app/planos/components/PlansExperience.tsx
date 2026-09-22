@@ -2,15 +2,15 @@
 
 import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { Check, ChevronDown, ChevronLeft, ChevronRight, Minus, Plus } from "lucide-react";
+import { Check, ChevronDown, ChevronLeft, ChevronRight, Info, Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import SubscriptionModal from "./SubscriptionModal";
 
 type Product = "ads" | "pages" | "hub";
 type Billing = "monthly" | "semiannual" | "annual";
-type Network = "google" | "meta" | "taboola" | "newsbreak" | "mgid" | "tiktok";
-type AccountNetwork = Exclude<Network, "mgid" | "tiktok">;
+type Network = "google" | "meta" | "taboola" | "newsbreak" | "mgid" | "tiktok" | "revcontent";
+type AccountNetwork = Exclude<Network, "mgid" | "tiktok" | "revcontent">;
 type CalculatorStep = "product" | "networks" | "volume" | "accounts" | "googleEmails" | "result";
 
 const PLAN_NAMES = ["Basic", "Starter", "Scale", "Max"] as const;
@@ -24,13 +24,14 @@ const NETWORKS: { id: Network; label: string; logo: string; logoWidth?: number }
   { id: "newsbreak", label: "NewsBreak", logo: "/newbreaklogo.webp" },
   { id: "mgid", label: "MGID", logo: "/logos/mgid.svg", logoWidth: 32 },
   { id: "tiktok", label: "TikTok Ads", logo: "/logos/tiktoklogo - Editado.png" },
+  { id: "revcontent", label: "RevContent", logo: "/logos/revcontent-mark.avif" },
 ];
 
-const ACCOUNT_NETWORKS = NETWORKS.filter((network): network is typeof network & { id: AccountNetwork } => network.id !== "mgid" && network.id !== "tiktok");
-
 function supportsAdAccounts(network: Network): network is AccountNetwork {
-  return network !== "mgid" && network !== "tiktok";
+  return network !== "mgid" && network !== "tiktok" && network !== "revcontent";
 }
+
+const ACCOUNT_NETWORKS = NETWORKS.filter((network): network is typeof network & { id: AccountNetwork } => supportsAdAccounts(network.id));
 
 const PRODUCT_LABELS: Record<Product, string> = {
   ads: "Ratoeira Ads",
@@ -443,6 +444,8 @@ function CalculatorQuestion({
   }
 
   if (step === "accounts") {
+    const hasEventOnlyNetwork = networks.some((network) => !supportsAdAccounts(network));
+
     return (
       <fieldset>
         <legend className="text-h4 mb-2 text-white">Quantas contas de anúncio você usa em cada rede?</legend>
@@ -454,6 +457,14 @@ function CalculatorQuestion({
             return <QuantityControl key={network.id} label={network.label} logo={network.logo} logoWidth={network.logoWidth} value={accounts[network.id]} onChange={(value) => onAccountChange(network.id, value)} />;
           })}
         </div>
+        {hasEventOnlyNetwork && (
+          <div role="note" className="mt-4 flex items-start gap-3 rounded-input border border-brand-primary/35 bg-brand-primary/[0.08] px-4 py-3 text-sm leading-6 text-gray-200">
+            <Info aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" />
+            <p>
+              <strong className="text-white">MGID, TikTok Ads e RevContent</strong> estão integradas para o envio de eventos com rastreamento avançado. Essas redes ainda não exigem integração de contas porque a Ratoeira não busca dados dessas fontes de tráfego.
+            </p>
+          </div>
+        )}
       </fieldset>
     );
   }

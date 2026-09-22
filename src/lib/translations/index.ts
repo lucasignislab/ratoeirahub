@@ -36,7 +36,7 @@ const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
     "nav.menu.metaAds": "Meta Ads",
     "nav.menu.metaAdsDesc": "Facebook & Instagram",
     "nav.menu.nativeAds": "Native Ads",
-    "nav.menu.nativeAdsDesc": "Taboola, NewsBreak e MGID",
+    "nav.menu.nativeAdsDesc": "Taboola, NewsBreak, MGID e RevContent",
     "nav.menu.tiktokAds": "TikTok Ads",
     "nav.menu.tiktokAdsDesc": "Eventos de conversão",
     "nav.menu.integrationsAI": "Integrações & IA",
@@ -138,35 +138,35 @@ const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
     "metaAds.cta.button": "Ver Planos",
 
     // Native Ads Hero
-    "nativeAds.hero.title": "<span style='color:#FFB800'>Taboola</span>, <span style='color:#FFB800'>NewsBreak</span> e <span style='color:#FFB800'>MGID</span> com rastreamento de elite.",
-    "nativeAds.hero.subtitle": "Anúncios nativos têm jornadas longas. A Ratoeira conecta visitas, leads e vendas aos seus criativos na Taboola, NewsBreak e MGID.",
+    "nativeAds.hero.title": "<span style='color:#FFB800'>Taboola</span>, <span style='color:#FFB800'>NewsBreak</span>, <span style='color:#FFB800'>MGID</span> e <span style='color:#FFB800'>RevContent</span> com rastreamento de elite.",
+    "nativeAds.hero.subtitle": "Anúncios nativos têm jornadas longas. A Ratoeira conecta visitas, leads e vendas aos criativos na Taboola e NewsBreak, além de enviar eventos avançados para MGID e RevContent.",
 
     // Native Ads Section
     "nativeAds.section.title": "<span class='text-brand-primary'>Native Ads</span>: pare de adivinhar o que vende.",
-    "nativeAds.section.subtitle": "Se você não sabe qual widget, manchete ou criativo gerou a conversão, está financiando a campanha errada. A Ratoeira traz clareza total do clique à venda na Taboola, NewsBreak e MGID.",
+    "nativeAds.section.subtitle": "Se você não sabe qual widget, manchete ou criativo gerou a conversão, está financiando a campanha errada. A Ratoeira traz clareza do clique à venda na Taboola e NewsBreak e envia eventos de conversão para MGID e RevContent.",
 
     // Native Ads Networks
     "nativeAds.networks.label": "Redes suportadas",
-    "nativeAds.platforms.title": "Taboola, NewsBreak e MGID",
-    "nativeAds.operation.title": "Uma operação nas três redes",
+    "nativeAds.platforms.title": "Taboola, NewsBreak, MGID e RevContent",
+    "nativeAds.operation.title": "Uma operação nas quatro redes",
 
     // Native Ads Taboola
-    "nativeAds.taboola.subtitle": "Rastreie cada widget, campanha e criativo nas três redes com precisão.",
+    "nativeAds.taboola.subtitle": "Rastreie campanhas e criativos na Taboola e NewsBreak e envie eventos avançados para MGID e RevContent.",
     "nativeAds.taboola.cards.adToSale.title": "Do anúncio até a venda",
-    "nativeAds.taboola.cards.adToSale.description": "No tráfego nativo, a jornada é longa: o usuário clica, sai, volta depois e pode trocar de dispositivo no meio do caminho. A Ratoeira rastreia cada etapa na Taboola, NewsBreak e MGID para você enxergar o funil real, sem buracos, e saber qual criativo gera receita.",
+    "nativeAds.taboola.cards.adToSale.description": "No tráfego nativo, a jornada é longa: o usuário clica, sai, volta depois e pode trocar de dispositivo no meio do caminho. A Ratoeira preserva cada etapa na Taboola e NewsBreak e envia os eventos de conversão para MGID e RevContent.",
     "nativeAds.taboola.cards.creativeProfits.title": "Saiba qual criativo lucra",
-    "nativeAds.taboola.cards.creativeProfits.description": "As redes mostram cliques, mas não a receita completa. A Ratoeira cruza tráfego, leads e vendas, atribuindo cada conversão ao widget, título e imagem certos na Taboola, NewsBreak e MGID. Descubra o que lucra — e o que só consome verba.",
+    "nativeAds.taboola.cards.creativeProfits.description": "As redes mostram cliques, mas não a receita completa. A Ratoeira cruza tráfego, leads e vendas e atribui cada conversão ao widget, título e imagem certos na Taboola e NewsBreak. Descubra o que lucra — e o que só consome verba.",
     "nativeAds.taboola.cards.fastOptimize.title": "Otimize antes do dashboard da rede",
     "nativeAds.taboola.cards.fastOptimize.description": "Os painéis das redes podem demorar a consolidar conversões. A Ratoeira entrega dados integrados mais rápido, para você ajustar orçamentos, pausar o ruim e dobrar a aposta no que dá lucro em cada canal.",
 
     // Native Ads NewsBreak
     "nativeAds.newsbreak.subtitle": "Compare desempenho e atribua receita a cada campanha e criativo.",
     "nativeAds.newsbreak.cards.feedToSale.title": "Rastreie o feed até a venda",
-    "nativeAds.newsbreak.cards.feedToSale.description": "Taboola, NewsBreak e MGID entregam volume, mas a jornada entre o clique e a conversão pode se perder. A Ratoeira preserva campanha, criativo e dispositivo — mesmo quando o comprador retorna horas depois.",
+    "nativeAds.newsbreak.cards.feedToSale.description": "As redes nativas entregam volume, mas a jornada entre o clique e a conversão pode se perder. A Ratoeira preserva campanha, criativo e dispositivo na Taboola e NewsBreak e envia eventos avançados para MGID e RevContent.",
     "nativeAds.newsbreak.cards.headlines.title": "Manchetes que realmente convertem",
-    "nativeAds.newsbreak.cards.headlines.description": "Na Taboola, NewsBreak e MGID, a manchete e a imagem fazem toda a diferença. A Ratoeira atribui cada venda ao criativo exato, para você escalar o que gera receita e pausar o que só traz clique barato.",
+    "nativeAds.newsbreak.cards.headlines.description": "Na Taboola e NewsBreak, a manchete e a imagem fazem toda a diferença. A Ratoeira atribui cada venda ao criativo exato, para você escalar o que gera receita e pausar o que só traz clique barato.",
     "nativeAds.newsbreak.cards.unifiedPanel.title": "Tudo no mesmo painel",
-    "nativeAds.newsbreak.cards.unifiedPanel.description": "Pare de alternar entre dashboards. A Ratoeira consolida Taboola, NewsBreak, MGID, Google Ads e Meta Ads em um só lugar. Você vê o funil completo por rede, campanha e criativo.",
+    "nativeAds.newsbreak.cards.unifiedPanel.description": "Pare de alternar entre dashboards. A Ratoeira consolida Taboola, NewsBreak, Google Ads e Meta Ads em um só lugar e envia eventos de conversão para MGID e RevContent.",
 
     // Native Ads How it Works
     "nativeAds.howItWorks.title": "Do clique ao dado real em minutos",
@@ -174,14 +174,14 @@ const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
 
     // Native Ads Steps
     "nativeAds.steps.connect.title": "Conecte as redes em minutos",
-    "nativeAds.steps.connect.description": "Integre Taboola, NewsBreak e MGID sem código complexo, planilhas ou APIs diferentes. Em poucos cliques, tudo pronto para rastrear.",
+    "nativeAds.steps.connect.description": "Integre as contas da Taboola e NewsBreak e configure o envio de eventos para MGID e RevContent. Em poucos cliques, tudo fica pronto para rastrear.",
     "nativeAds.steps.track.title": "Rastreie cada clique",
     "nativeAds.steps.track.description": "Capture campanha, widget e criativo de cada visita. Mesmo com jornadas longas ou troca de dispositivo, a atribuição chega intacta.",
     "nativeAds.steps.scale.title": "Escale com conversão real",
     "nativeAds.steps.scale.description": "Veja o funil completo e invista só no que gera lucro. Decisões baseadas em dado real — não em estimativas.",
 
     // Native Ads CTA
-    "nativeAds.cta.title": "Pronto para escalar <span class='text-brand-primary whitespace-nowrap'>Taboola</span>, <span class='text-brand-primary whitespace-nowrap'>NewsBreak</span> e <span class='text-brand-primary whitespace-nowrap'>MGID</span><br/>com dados limpos?",
+    "nativeAds.cta.title": "Pronto para escalar <span class='text-brand-primary whitespace-nowrap'>Taboola</span>, <span class='text-brand-primary whitespace-nowrap'>NewsBreak</span>, <span class='text-brand-primary whitespace-nowrap'>MGID</span> e <span class='text-brand-primary whitespace-nowrap'>RevContent</span><br/>com dados limpos?",
     "nativeAds.cta.description": "Escolha o plano ideal para o seu volume de tráfego e comece a rastrear com precisão.",
     "nativeAds.cta.button": "Ver Planos",
 
@@ -1299,7 +1299,7 @@ const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
     "nav.menu.metaAds": "Meta Ads",
     "nav.menu.metaAdsDesc": "Facebook & Instagram",
     "nav.menu.nativeAds": "Native Ads",
-    "nav.menu.nativeAdsDesc": "Taboola, NewsBreak, and MGID",
+    "nav.menu.nativeAdsDesc": "Taboola, NewsBreak, MGID, and RevContent",
     "nav.menu.tiktokAds": "TikTok Ads",
     "nav.menu.tiktokAdsDesc": "Conversion events",
     "nav.menu.integrationsAI": "Integrations & AI",
@@ -1401,35 +1401,35 @@ const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
     "metaAds.cta.button": "See Plans",
 
     // Native Ads Hero
-    "nativeAds.hero.title": "<span style='color:#FFB800'>Taboola</span>, <span style='color:#FFB800'>NewsBreak</span>, and <span style='color:#FFB800'>MGID</span> with elite tracking.",
-    "nativeAds.hero.subtitle": "Native ads have long customer journeys. Ratoeira connects visits, leads, and sales to your creatives on Taboola, NewsBreak, and MGID.",
+    "nativeAds.hero.title": "<span style='color:#FFB800'>Taboola</span>, <span style='color:#FFB800'>NewsBreak</span>, <span style='color:#FFB800'>MGID</span>, and <span style='color:#FFB800'>RevContent</span> with elite tracking.",
+    "nativeAds.hero.subtitle": "Native ads have long customer journeys. Ratoeira connects visits, leads, and sales to creatives on Taboola and NewsBreak, while sending advanced events to MGID and RevContent.",
 
     // Native Ads Section
     "nativeAds.section.title": "<span class='text-brand-primary'>Native Ads</span>: stop guessing what sells.",
-    "nativeAds.section.subtitle": "If you don't know which widget, headline, or creative generated the conversion, you're funding the wrong campaign. Ratoeira brings total clarity from click to sale on Taboola, NewsBreak, and MGID.",
+    "nativeAds.section.subtitle": "If you don't know which widget, headline, or creative generated the conversion, you're funding the wrong campaign. Ratoeira brings clarity from click to sale on Taboola and NewsBreak and sends conversion events to MGID and RevContent.",
 
     // Native Ads Networks
     "nativeAds.networks.label": "Supported networks",
-    "nativeAds.platforms.title": "Taboola, NewsBreak, and MGID",
-    "nativeAds.operation.title": "One operation across three networks",
+    "nativeAds.platforms.title": "Taboola, NewsBreak, MGID, and RevContent",
+    "nativeAds.operation.title": "One operation across four networks",
 
     // Native Ads Taboola
-    "nativeAds.taboola.subtitle": "Track every widget, campaign, and creative across all three networks with precision.",
+    "nativeAds.taboola.subtitle": "Track campaigns and creatives on Taboola and NewsBreak and send advanced events to MGID and RevContent.",
     "nativeAds.taboola.cards.adToSale.title": "From ad to sale",
-    "nativeAds.taboola.cards.adToSale.description": "In native traffic the journey is long: the user clicks, leaves, comes back later and may switch devices along the way. Ratoeira tracks every step — from the ad click to conversion — so you see the real funnel, without holes, and know exactly which creative is generating revenue.",
+    "nativeAds.taboola.cards.adToSale.description": "In native traffic the journey is long: the user clicks, leaves, comes back later, and may switch devices along the way. Ratoeira preserves every step on Taboola and NewsBreak and sends conversion events to MGID and RevContent.",
     "nativeAds.taboola.cards.creativeProfits.title": "Know which creative profits",
-    "nativeAds.taboola.cards.creativeProfits.description": "Networks show clicks, but not the full revenue picture. Ratoeira cross-references traffic, leads, and sales, attributing each conversion to the right widget, title, and image on Taboola, NewsBreak, and MGID. Find out what profits — and what just consumes budget.",
+    "nativeAds.taboola.cards.creativeProfits.description": "Networks show clicks, but not the full revenue picture. Ratoeira cross-references traffic, leads, and sales, attributing each conversion to the right widget, title, and image on Taboola and NewsBreak. Find out what profits — and what just consumes budget.",
     "nativeAds.taboola.cards.fastOptimize.title": "Optimize before the network's dashboard",
     "nativeAds.taboola.cards.fastOptimize.description": "Taboola's panel takes time to consolidate conversions. Ratoeira delivers integrated data faster, so you adjust budgets, pause the bad, and double down on what brings profit.",
 
     // Native Ads NewsBreak
     "nativeAds.newsbreak.subtitle": "Compare performance and attribute revenue to each campaign and creative.",
     "nativeAds.newsbreak.cards.feedToSale.title": "Track the feed to the sale",
-    "nativeAds.newsbreak.cards.feedToSale.description": "NewsBreak delivers volume, but the journey between the feed and the conversion often gets lost. Ratoeira preserves campaign, creative, and device — even when the buyer returns hours later.",
+    "nativeAds.newsbreak.cards.feedToSale.description": "Native networks deliver volume, but the journey between the click and conversion can get lost. Ratoeira preserves campaign, creative, and device on Taboola and NewsBreak and sends advanced events to MGID and RevContent.",
     "nativeAds.newsbreak.cards.headlines.title": "Headlines that actually convert",
-    "nativeAds.newsbreak.cards.headlines.description": "On NewsBreak, the headline and thumbnail make all the difference. Ratoeira attributes each sale to the exact creative, so you scale what generates revenue and pause what only brings cheap clicks.",
+    "nativeAds.newsbreak.cards.headlines.description": "On Taboola and NewsBreak, the headline and image make all the difference. Ratoeira attributes each sale to the exact creative, so you scale what generates revenue and pause what only brings cheap clicks.",
     "nativeAds.newsbreak.cards.unifiedPanel.title": "Everything in one panel",
-    "nativeAds.newsbreak.cards.unifiedPanel.description": "Stop switching between dashboards. Ratoeira consolidates Taboola, NewsBreak, MGID, Google Ads, and Meta Ads in one place. You see the complete funnel per network, campaign, and creative.",
+    "nativeAds.newsbreak.cards.unifiedPanel.description": "Stop switching between dashboards. Ratoeira consolidates Taboola, NewsBreak, Google Ads, and Meta Ads in one place and sends conversion events to MGID and RevContent.",
 
     // Native Ads How it Works
     "nativeAds.howItWorks.title": "From click to real data in minutes",
@@ -1437,14 +1437,14 @@ const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
 
     // Native Ads Steps
     "nativeAds.steps.connect.title": "Connect the networks in minutes",
-    "nativeAds.steps.connect.description": "Integrate Taboola, NewsBreak, and MGID without complex code, spreadsheets, or different APIs. In a few clicks, everything is ready to track.",
+    "nativeAds.steps.connect.description": "Connect Taboola and NewsBreak accounts and configure event delivery to MGID and RevContent. In a few clicks, everything is ready to track.",
     "nativeAds.steps.track.title": "Track every click",
     "nativeAds.steps.track.description": "Capture campaign, widget, and creative for each visit. Even with long journeys or device switching, attribution arrives intact.",
     "nativeAds.steps.scale.title": "Scale with real conversion",
     "nativeAds.steps.scale.description": "See the complete funnel and invest only in what generates profit. Decisions based on real data — not estimates.",
 
     // Native Ads CTA
-    "nativeAds.cta.title": "Ready to scale <span class='text-brand-primary whitespace-nowrap'>Taboola</span>, <span class='text-brand-primary whitespace-nowrap'>NewsBreak</span>, and <span class='text-brand-primary whitespace-nowrap'>MGID</span><br/>with clean data?",
+    "nativeAds.cta.title": "Ready to scale <span class='text-brand-primary whitespace-nowrap'>Taboola</span>, <span class='text-brand-primary whitespace-nowrap'>NewsBreak</span>, <span class='text-brand-primary whitespace-nowrap'>MGID</span>, and <span class='text-brand-primary whitespace-nowrap'>RevContent</span><br/>with clean data?",
     "nativeAds.cta.description": "Choose the ideal plan for your traffic volume and start tracking with precision.",
     "nativeAds.cta.button": "See Plans",
 
@@ -2555,7 +2555,7 @@ const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
     "nav.menu.metaAds": "Meta Ads",
     "nav.menu.metaAdsDesc": "Facebook & Instagram",
     "nav.menu.nativeAds": "Native Ads",
-    "nav.menu.nativeAdsDesc": "Taboola, NewsBreak y MGID",
+    "nav.menu.nativeAdsDesc": "Taboola, NewsBreak, MGID y RevContent",
     "nav.menu.tiktokAds": "TikTok Ads",
     "nav.menu.tiktokAdsDesc": "Eventos de conversión",
     "nav.menu.integrationsAI": "Integraciones & IA",
@@ -2657,35 +2657,35 @@ const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
     "metaAds.cta.button": "Ver Planes",
 
     // Native Ads Hero
-    "nativeAds.hero.title": "<span style='color:#FFB800'>Taboola</span>, <span style='color:#FFB800'>NewsBreak</span> y <span style='color:#FFB800'>MGID</span> con rastreo de élite.",
-    "nativeAds.hero.subtitle": "Los anuncios nativos tienen recorridos largos. Ratoeira conecta visitas, leads y ventas a tus creativos en Taboola, NewsBreak y MGID.",
+    "nativeAds.hero.title": "<span style='color:#FFB800'>Taboola</span>, <span style='color:#FFB800'>NewsBreak</span>, <span style='color:#FFB800'>MGID</span> y <span style='color:#FFB800'>RevContent</span> con rastreo de élite.",
+    "nativeAds.hero.subtitle": "Los anuncios nativos tienen recorridos largos. Ratoeira conecta visitas, leads y ventas a los creativos en Taboola y NewsBreak, y envía eventos avanzados a MGID y RevContent.",
 
     // Native Ads Section
     "nativeAds.section.title": "<span class='text-brand-primary'>Native Ads</span>: deja de adivinar qué vende.",
-    "nativeAds.section.subtitle": "Si no sabes qué widget, titular o creativo generó la conversión, estás financiando la campaña equivocada. Ratoeira trae claridad total del clic a la venta en Taboola, NewsBreak y MGID.",
+    "nativeAds.section.subtitle": "Si no sabes qué widget, titular o creativo generó la conversión, estás financiando la campaña equivocada. Ratoeira aporta claridad del clic a la venta en Taboola y NewsBreak y envía eventos de conversión a MGID y RevContent.",
 
     // Native Ads Networks
     "nativeAds.networks.label": "Redes soportadas",
-    "nativeAds.platforms.title": "Taboola, NewsBreak y MGID",
-    "nativeAds.operation.title": "Una operación en tres redes",
+    "nativeAds.platforms.title": "Taboola, NewsBreak, MGID y RevContent",
+    "nativeAds.operation.title": "Una operación en cuatro redes",
 
     // Native Ads Taboola
-    "nativeAds.taboola.subtitle": "Rastrea cada widget, campaña y creativo en las tres redes con precisión.",
+    "nativeAds.taboola.subtitle": "Rastrea campañas y creativos en Taboola y NewsBreak y envía eventos avanzados a MGID y RevContent.",
     "nativeAds.taboola.cards.adToSale.title": "Del anuncio a la venta",
-    "nativeAds.taboola.cards.adToSale.description": "En el tráfico nativo el viaje es largo: el usuario hace clic, sale, vuelve después y puede cambiar de dispositivo en el camino. Ratoeira rastrea cada etapa — del clic en el anuncio a la conversión — para que veas el funnel real, sin huecos, y sepas exactamente qué creativo está generando ingresos.",
+    "nativeAds.taboola.cards.adToSale.description": "En el tráfico nativo el recorrido es largo: el usuario hace clic, sale, vuelve después y puede cambiar de dispositivo. Ratoeira preserva cada etapa en Taboola y NewsBreak y envía los eventos de conversión a MGID y RevContent.",
     "nativeAds.taboola.cards.creativeProfits.title": "Sabe qué creativo da ganancias",
-    "nativeAds.taboola.cards.creativeProfits.description": "Las redes muestran clics, pero no el panorama completo de ingresos. Ratoeira cruza tráfico, leads y ventas, atribuyendo cada conversión al widget, título e imagen correctos en Taboola, NewsBreak y MGID. Descubre qué gana — y qué solo consume presupuesto.",
+    "nativeAds.taboola.cards.creativeProfits.description": "Las redes muestran clics, pero no el panorama completo de ingresos. Ratoeira cruza tráfico, leads y ventas y atribuye cada conversión al widget, título e imagen correctos en Taboola y NewsBreak. Descubre qué genera ganancias — y qué solo consume presupuesto.",
     "nativeAds.taboola.cards.fastOptimize.title": "Optimiza antes del dashboard de la red",
     "nativeAds.taboola.cards.fastOptimize.description": "El panel de Taboola tarda en consolidar conversiones. Ratoeira entrega datos integrados más rápido, para que ajustes presupuestos, pauses lo malo y duples la apuesta por lo que da ganancias.",
 
     // Native Ads NewsBreak
     "nativeAds.newsbreak.subtitle": "Compara el rendimiento y atribuye ingresos a cada campaña y creativo.",
     "nativeAds.newsbreak.cards.feedToSale.title": "Rastrea el feed hasta la venta",
-    "nativeAds.newsbreak.cards.feedToSale.description": "NewsBreak entrega volumen, pero el viaje entre el feed y la conversión suele perderse. Ratoeira preserva campaña, creativo y dispositivo — incluso cuando el comprador vuelve horas después.",
+    "nativeAds.newsbreak.cards.feedToSale.description": "Las redes nativas entregan volumen, pero el recorrido entre el clic y la conversión puede perderse. Ratoeira preserva campaña, creativo y dispositivo en Taboola y NewsBreak y envía eventos avanzados a MGID y RevContent.",
     "nativeAds.newsbreak.cards.headlines.title": "Titulares que realmente convierten",
-    "nativeAds.newsbreak.cards.headlines.description": "En NewsBreak, el titular y la miniatura marcan toda la diferencia. Ratoeira atribuye cada venta al creativo exacto, para que escales lo que genera ingresos y pauses lo que solo trae clics baratos.",
+    "nativeAds.newsbreak.cards.headlines.description": "En Taboola y NewsBreak, el titular y la imagen marcan toda la diferencia. Ratoeira atribuye cada venta al creativo exacto, para que escales lo que genera ingresos y pauses lo que solo trae clics baratos.",
     "nativeAds.newsbreak.cards.unifiedPanel.title": "Todo en el mismo panel",
-    "nativeAds.newsbreak.cards.unifiedPanel.description": "Deja de alternar entre dashboards. Ratoeira consolida Taboola, NewsBreak, MGID, Google Ads y Meta Ads en un solo lugar. Ves el funnel completo por red, campaña y creativo.",
+    "nativeAds.newsbreak.cards.unifiedPanel.description": "Deja de alternar entre dashboards. Ratoeira consolida Taboola, NewsBreak, Google Ads y Meta Ads en un solo lugar y envía eventos de conversión a MGID y RevContent.",
 
     // Native Ads How it Works
     "nativeAds.howItWorks.title": "Del clic al dato real en minutos",
@@ -2693,14 +2693,14 @@ const translations: Record<"pt-BR" | "en" | "es", Record<string, string>> = {
 
     // Native Ads Steps
     "nativeAds.steps.connect.title": "Conecta las redes en minutos",
-    "nativeAds.steps.connect.description": "Integra Taboola, NewsBreak y MGID sin código complejo, planillas o APIs diferentes. En pocos clics, todo listo para rastrear.",
+    "nativeAds.steps.connect.description": "Integra las cuentas de Taboola y NewsBreak y configura el envío de eventos a MGID y RevContent. En pocos clics, todo queda listo para rastrear.",
     "nativeAds.steps.track.title": "Rastrea cada clic",
     "nativeAds.steps.track.description": "Captura campaña, widget y creativo de cada visita. Incluso con viajes largos o cambio de dispositivo, la atribución llega intacta.",
     "nativeAds.steps.scale.title": "Escala con conversión real",
     "nativeAds.steps.scale.description": "Ve el funnel completo e invierte solo en lo que genera ganancias. Decisiones basadas en datos reales — no en estimaciones.",
 
     // Native Ads CTA
-    "nativeAds.cta.title": "¿Listo para escalar <span class='text-brand-primary whitespace-nowrap'>Taboola</span>, <span class='text-brand-primary whitespace-nowrap'>NewsBreak</span> y <span class='text-brand-primary whitespace-nowrap'>MGID</span><br/>con datos limpios?",
+    "nativeAds.cta.title": "¿Listo para escalar <span class='text-brand-primary whitespace-nowrap'>Taboola</span>, <span class='text-brand-primary whitespace-nowrap'>NewsBreak</span>, <span class='text-brand-primary whitespace-nowrap'>MGID</span> y <span class='text-brand-primary whitespace-nowrap'>RevContent</span><br/>con datos limpios?",
     "nativeAds.cta.description": "Elige el plan ideal para tu volumen de tráfico y comienza a rastrear con precisión.",
     "nativeAds.cta.button": "Ver Planes",
 

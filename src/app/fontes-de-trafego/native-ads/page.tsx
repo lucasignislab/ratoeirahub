@@ -26,6 +26,7 @@ export default function NativeAdsTrafficSourcePage() {
     { name: "Taboola", logo: "/taboolalogo.png" },
     { name: "NewsBreak", logo: "/newbreaklogo.webp" },
     { name: "MGID", logo: "/logos/mgid.svg" },
+    { name: "RevContent", logo: "/logos/revcontent-mark.avif" },
   ], []);
 
   const taboolaCards = useMemo(() => [
