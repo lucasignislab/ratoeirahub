@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 const platforms = [
   { name: "Google Ads", logo: "/icons/pricing/google-ads.webp" },
   { name: "Meta Ads", logo: "/icons/pricing/meta-ads.png" },
@@ -7,6 +9,7 @@ const platforms = [
   { name: "NewsBreak", logo: "/newbreaklogo.webp" },
   { name: "TikTok Ads", logo: "/logos/tiktoklogo - Editado.png" },
   { name: "MGID", logo: "/logos/mgid.svg" },
+  { name: "RevContent", logo: "/logos/revcontent-mark.avif" },
 ];
 
 export default function LogoMarquee() {
@@ -20,9 +23,11 @@ export default function LogoMarquee() {
                 key={`${platform.name}-${group}`}
                 className="flex flex-col items-center justify-center gap-2 w-[120px] md:w-[160px] mr-12 md:mr-20"
               >
-                <img loading="lazy" decoding="async"
+                <Image
                   src={platform.logo}
                   alt={platform.name}
+                  width={120}
+                  height={32}
                   className="h-6 md:h-8 w-auto object-contain"
                 />
                 <span className="text-xs md:text-sm font-semibold text-gray-400 tracking-wide">
