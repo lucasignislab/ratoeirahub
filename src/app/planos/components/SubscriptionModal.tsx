@@ -7,7 +7,6 @@ import { X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { WHATSAPP_SUPPORT_URL } from "@/components/WhatsAppButton";
 
 interface SubscriptionModalProps {
   isOpen: boolean;
@@ -154,13 +153,11 @@ export default function SubscriptionModal({
     setIsSubmitting(true);
 
     const phoneDigits = stripPhone(formData.phone);
-    const destination = new URL(checkoutUrl || WHATSAPP_SUPPORT_URL, window.location.href);
-    if (checkoutUrl) {
-      destination.searchParams.set("name", formData.fullName.trim());
-      destination.searchParams.set("email", formData.email.trim());
-      destination.searchParams.set("phone", phoneDigits);
-      destination.searchParams.set("phone_full", phoneDigits);
-    }
+    const destination = new URL(checkoutUrl);
+    destination.searchParams.set("name", formData.fullName.trim());
+    destination.searchParams.set("email", formData.email.trim());
+    destination.searchParams.set("phone", phoneDigits);
+    destination.searchParams.set("phone_full", phoneDigits);
 
     await new Promise((resolve) => setTimeout(resolve, 400));
     window.location.assign(destination.toString());

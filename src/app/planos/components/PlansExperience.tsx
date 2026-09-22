@@ -6,6 +6,7 @@ import { Check, ChevronDown, ChevronLeft, ChevronRight, Info, Minus, Plus } from
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import SubscriptionModal from "./SubscriptionModal";
+import { getCheckoutUrl } from "./checkout-links";
 
 type Product = "ads" | "pages" | "hub";
 type Billing = "monthly" | "semiannual" | "annual";
@@ -16,7 +17,8 @@ type CalculatorStep = "product" | "networks" | "volume" | "accounts" | "googleEm
 const PLAN_NAMES = ["Basic", "Starter", "Scale", "Max"] as const;
 type PlanName = (typeof PLAN_NAMES)[number];
 type SubscriptionSelection = { name: string; checkoutUrl: string };
-type SubscribeHandler = (product: Product, plan: PlanName, billing: Billing) => void;
+type NetworkTier = "one" | "two" | "all";
+type SubscribeHandler = (product: Product, plan: PlanName, billing: Billing, tier: NetworkTier) => void;
 const NETWORKS: { id: Network; label: string; logo: string; logoWidth?: number }[] = [
   { id: "google", label: "Google Ads", logo: "/icons/pricing/google-ads.webp" },
   { id: "meta", label: "Meta Ads", logo: "/icons/pricing/meta-ads.png" },
@@ -122,7 +124,7 @@ const VOLUME_PLAN = [0, 0, 1, 2, 3, 3];
 
 const currency = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 });
 
-function networkTier(count: number): "one" | "two" | "all" {
+function networkTier(count: number): NetworkTier {
   if (count <= 1) return "one";
   if (count === 2) return "two";
   return "all";
@@ -296,9 +298,9 @@ function RecommendedPlanResult({
         <p className="mt-2 max-w-none text-sm text-gray-300">{PRODUCT_DESCRIPTIONS[product][recommended]} A configuração abaixo já considera o seu volume, as redes escolhidas e os limites informados.</p>
 
         <div className="mt-5 grid gap-3 lg:grid-cols-3 lg:gap-4">
-          <ResultPriceCard label="Mensal" price={selectedPrices.monthly[recommended]} onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "monthly")} />
-          <ResultPriceCard label="Semestral" installment="6x" price={selectedPrices.semiannual[recommended]} cashPrice={selectedPrices.semiannualCash[recommended]} savings={semiannualSavings} onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "semiannual")} />
-          <ResultPriceCard label="Anual" installment="12x" price={selectedPrices.annual[recommended]} cashPrice={selectedPrices.annualCash[recommended]} savings={annualSavings} featured onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "annual")} />
+          <ResultPriceCard label="Mensal" price={selectedPrices.monthly[recommended]} onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "monthly", tier)} />
+          <ResultPriceCard label="Semestral" installment="6x" price={selectedPrices.semiannual[recommended]} cashPrice={selectedPrices.semiannualCash[recommended]} savings={semiannualSavings} onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "semiannual", tier)} />
+          <ResultPriceCard label="Anual" installment="12x" price={selectedPrices.annual[recommended]} cashPrice={selectedPrices.annualCash[recommended]} savings={annualSavings} featured onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "annual", tier)} />
         </div>
 
         <p className="mt-3 text-center text-xs text-brand-primary">Economia calculada sobre o pagamento mensal. Valores sujeitos a reajuste.</p>
@@ -959,7 +961,7 @@ function PricingCards({ onSubscribe }: { onSubscribe: SubscribeHandler }) {
 
                 <PricingCardDetails product={product} index={index} networkCount={networkCount} tier={tier} />
                 <div className="flex-1" />
-                <Button type="button" variant={featured ? "default" : "outline"} size="lg" onClick={() => onSubscribe(product, name, billing)} className={cn("mt-6 w-full", unlimited && "border-emerald-500 bg-emerald-500 text-black hover:bg-emerald-400")}>Assinar {name}</Button>
+                <Button type="button" variant={featured ? "default" : "outline"} size="lg" onClick={() => onSubscribe(product, name, billing, tier)} className={cn("mt-6 w-full", unlimited && "border-emerald-500 bg-emerald-500 text-black hover:bg-emerald-400")}>Assinar {name}</Button>
                 <p className="mt-3 text-center text-xs text-gray-500">{billing === "annual" ? "12x sem juros ou à vista com desconto" : billing === "semiannual" ? "6x sem juros ou à vista com desconto" : "Cobrança mensal"}</p>
               </article>
             );
@@ -978,11 +980,12 @@ function PricingCards({ onSubscribe }: { onSubscribe: SubscribeHandler }) {
 export default function PlansExperience() {
   const [selectedSubscription, setSelectedSubscription] = useState<SubscriptionSelection | null>(null);
 
-  const handleSubscribe: SubscribeHandler = (product, plan, billing) => {
+  const handleSubscribe: SubscribeHandler = (product, plan, billing, tier) => {
     const billingLabel = { monthly: "Mensal", semiannual: "Semestral", annual: "Anual" }[billing];
+    const networkLabel = { one: "1 rede", two: "2 redes", all: "todas as redes" }[tier];
     setSelectedSubscription({
-      name: `${PRODUCT_LABELS[product]} ${plan} — ${billingLabel}`,
-      checkoutUrl: "",
+      name: `${PRODUCT_LABELS[product]} ${plan}${product === "pages" ? "" : ` — ${networkLabel}`} — ${billingLabel}`,
+      checkoutUrl: getCheckoutUrl(product, plan, billing, tier),
     });
   };
 
