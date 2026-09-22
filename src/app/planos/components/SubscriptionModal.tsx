@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -59,11 +60,15 @@ export default function SubscriptionModal({
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [renewalAccepted, setRenewalAccepted] = useState(false);
 
   const resetForm = useCallback(() => {
     setFormData({ fullName: "", email: "", phone: "" });
     setErrors({});
     setIsSubmitting(false);
+    setTermsAccepted(false);
+    setRenewalAccepted(false);
   }, []);
 
   const closeModal = useCallback(() => {
@@ -143,6 +148,7 @@ export default function SubscriptionModal({
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
+    if (!termsAccepted || !renewalAccepted) return;
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -167,7 +173,7 @@ export default function SubscriptionModal({
   }
 
   const inputBaseClass =
-    "w-full bg-[#1a1a1a] border rounded-input px-4 py-3 text-base text-white placeholder:text-[#666666] transition-all duration-200 " +
+    "w-full bg-[#1a1a1a] border rounded-input px-4 py-2.5 text-base text-white placeholder:text-[#666666] transition-all duration-200 " +
     "focus:outline-none focus:ring-2 focus:ring-[#FF7E4A]/20 focus:border-[#FF7E4A] " +
     "disabled:opacity-50 disabled:cursor-not-allowed";
 
@@ -205,7 +211,7 @@ export default function SubscriptionModal({
               <X className="h-5 w-5" />
             </button>
 
-            <div className="mb-6 pr-8">
+            <div className="mb-4 pr-8">
               <h2
                 id="subscription-modal-title"
                 className="text-heading-subtitle text-white mb-1"
@@ -221,7 +227,7 @@ export default function SubscriptionModal({
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-3" noValidate>
               <div className="space-y-1.5">
                 <label
                   htmlFor="fullName"
@@ -305,13 +311,48 @@ export default function SubscriptionModal({
                 )}
               </div>
 
+              <div role="group" aria-label={t("planos.modal.requiredConsents")} className="space-y-3 border-t border-white/[0.08] pt-4">
+                <label htmlFor="terms-consent" className="flex cursor-pointer items-start gap-3 text-sm leading-5 text-gray-300">
+                  <input
+                    id="terms-consent"
+                    type="checkbox"
+                    checked={termsAccepted}
+                    onChange={(event) => setTermsAccepted(event.target.checked)}
+                    disabled={isSubmitting}
+                    className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#111111] disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                  <span>
+                    {t("planos.modal.termsPrefix")}{" "}
+                    <Link href="/termos-de-uso/" target="_blank" rel="noopener noreferrer" onClick={(event) => event.stopPropagation()} className="font-semibold text-white underline decoration-brand-primary/70 underline-offset-2 hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
+                      {t("planos.modal.termsLink")}
+                    </Link>{" "}
+                    {t("planos.modal.privacyConnector")}{" "}
+                    <Link href="/politica-de-privacidade/" target="_blank" rel="noopener noreferrer" onClick={(event) => event.stopPropagation()} className="font-semibold text-white underline decoration-brand-primary/70 underline-offset-2 hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary">
+                      {t("planos.modal.privacyLink")}
+                    </Link>.
+                  </span>
+                </label>
+
+                <label htmlFor="renewal-consent" className="flex cursor-pointer items-start gap-3 text-sm leading-5 text-gray-300">
+                  <input
+                    id="renewal-consent"
+                    type="checkbox"
+                    checked={renewalAccepted}
+                    onChange={(event) => setRenewalAccepted(event.target.checked)}
+                    disabled={isSubmitting}
+                    className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#111111] disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                  <span>{t("planos.modal.renewalConsent")}</span>
+                </label>
+              </div>
+
               <div className="pt-2">
                 <Button
                   type="submit"
                   variant="default"
                   size="lg"
-                  disabled={isSubmitting}
-                  className="w-full h-[56px] font-bold text-base"
+                  disabled={isSubmitting || !termsAccepted || !renewalAccepted}
+                  className="h-[52px] w-full text-base font-bold"
                 >
                   {isSubmitting ? (
                     <span className="inline-flex items-center gap-2">
