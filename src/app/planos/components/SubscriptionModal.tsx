@@ -6,6 +6,7 @@ import { X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { WHATSAPP_SUPPORT_URL } from "@/components/WhatsAppButton";
 
 interface SubscriptionModalProps {
   isOpen: boolean;
@@ -65,24 +66,23 @@ export default function SubscriptionModal({
     setIsSubmitting(false);
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) {
-      resetForm();
-    }
-  }, [isOpen, resetForm]);
+  const closeModal = useCallback(() => {
+    resetForm();
+    onClose();
+  }, [onClose, resetForm]);
 
   useEffect(() => {
     if (!isOpen) return;
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        onClose();
+        closeModal();
       }
     }
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [closeModal, isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -147,37 +147,22 @@ export default function SubscriptionModal({
 
     setIsSubmitting(true);
 
-    // TODO: enviar dados de lead para backend/CRM quando houver integração
-    // eslint-disable-next-line no-console
-    console.log("Lead de assinatura:", {
-      plano: planName,
-      ...formData,
-      telefoneNumeros: stripPhone(formData.phone),
-      checkoutUrl,
-    });
-
-    // Monta URL do checkout com os dados para pré-preenchimento
     const phoneDigits = stripPhone(formData.phone);
-    const checkout = new URL(checkoutUrl, window.location.href);
-    checkout.searchParams.set("name", formData.fullName.trim());
-    checkout.searchParams.set("email", formData.email.trim());
-    checkout.searchParams.set("phone", phoneDigits);
-    checkout.searchParams.set("phone_full", phoneDigits);
-
-    // Pequeno delay para feedback visual antes do redirecionamento
-    await new Promise((resolve) => setTimeout(resolve, 400));
-
+    const destination = new URL(checkoutUrl || WHATSAPP_SUPPORT_URL, window.location.href);
     if (checkoutUrl) {
-      window.open(checkout.toString(), "_blank", "noopener,noreferrer");
+      destination.searchParams.set("name", formData.fullName.trim());
+      destination.searchParams.set("email", formData.email.trim());
+      destination.searchParams.set("phone", phoneDigits);
+      destination.searchParams.set("phone_full", phoneDigits);
     }
 
-    setIsSubmitting(false);
-    onClose();
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    window.location.assign(destination.toString());
   }
 
   function handleBackdropClick(event: React.MouseEvent<HTMLDivElement>) {
     if (event.target === event.currentTarget) {
-      onClose();
+      closeModal();
     }
   }
 
@@ -207,13 +192,13 @@ export default function SubscriptionModal({
             aria-modal="true"
             aria-labelledby="subscription-modal-title"
             className={cn(
-              "relative w-full max-w-md rounded-card border border-white/[0.08] bg-[#111111] p-6 sm:p-8 shadow-card-hover",
+              "relative max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-card border border-white/[0.08] bg-[#111111] p-6 shadow-card-hover sm:p-8",
               "outline-none"
             )}
           >
             <button
               type="button"
-              onClick={onClose}
+              onClick={closeModal}
               className="absolute right-4 top-4 inline-flex h-11 w-11 md:h-8 md:w-8 items-center justify-center rounded-full text-[#888888] transition-colors hover:bg-white/[0.08] hover:text-white"
               aria-label={t("planos.modal.close")}
             >
@@ -247,6 +232,9 @@ export default function SubscriptionModal({
                 <input
                   id="fullName"
                   type="text"
+                  autoComplete="name"
+                  autoFocus
+                  maxLength={120}
                   value={formData.fullName}
                   onChange={handleChange("fullName")}
                   placeholder={t("planos.modal.fullNamePlaceholder")}
@@ -272,6 +260,8 @@ export default function SubscriptionModal({
                 <input
                   id="email"
                   type="email"
+                  autoComplete="email"
+                  maxLength={254}
                   value={formData.email}
                   onChange={handleChange("email")}
                   placeholder={t("planos.modal.emailPlaceholder")}
@@ -298,6 +288,7 @@ export default function SubscriptionModal({
                   id="phone"
                   type="tel"
                   inputMode="tel"
+                  autoComplete="tel"
                   maxLength={MAX_PHONE_DIGITS + 1}
                   value={formData.phone}
                   onChange={handlePhoneChange}

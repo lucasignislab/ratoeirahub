@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Check, ChevronDown, ChevronLeft, ChevronRight, Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import SubscriptionModal from "./SubscriptionModal";
 
 type Product = "ads" | "pages" | "hub";
 type Billing = "monthly" | "semiannual" | "annual";
@@ -13,6 +14,9 @@ type AccountNetwork = Exclude<Network, "mgid" | "tiktok">;
 type CalculatorStep = "product" | "networks" | "volume" | "accounts" | "googleEmails" | "result";
 
 const PLAN_NAMES = ["Basic", "Starter", "Scale", "Max"] as const;
+type PlanName = (typeof PLAN_NAMES)[number];
+type SubscriptionSelection = { name: string; checkoutUrl: string };
+type SubscribeHandler = (product: Product, plan: PlanName, billing: Billing) => void;
 const NETWORKS: { id: Network; label: string; logo: string; logoWidth?: number }[] = [
   { id: "google", label: "Google Ads", logo: "/icons/pricing/google-ads.webp" },
   { id: "meta", label: "Meta Ads", logo: "/icons/pricing/meta-ads.png" },
@@ -189,6 +193,7 @@ function ResultPriceCard({
   cashPrice,
   savings,
   featured = false,
+  onSubscribe,
 }: {
   label: string;
   installment?: string;
@@ -196,6 +201,7 @@ function ResultPriceCard({
   cashPrice?: number;
   savings?: number;
   featured?: boolean;
+  onSubscribe: () => void;
 }) {
   return (
     <div className={cn("flex min-h-36 flex-col rounded-card border p-3", featured ? "border-emerald-500/70 bg-emerald-500/[0.08]" : "border-white/10 bg-white/[0.035]")}>
@@ -208,7 +214,7 @@ function ResultPriceCard({
       {cashPrice && <p className="text-small mt-1 text-gray-300">ou <strong className="text-white">R$ {currency.format(cashPrice)}</strong> à vista</p>}
       {savings && savings > 0 ? <span className="mt-2 rounded-badge border border-emerald-500/50 bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-300">Economia de {savings}%</span> : null}
       <div className="flex-1" />
-      <Button type="button" size="sm" variant={featured ? "default" : "outline"} disabled className="mt-2 w-full">Checkout em configuração</Button>
+      <Button type="button" size="sm" variant={featured ? "default" : "outline"} onClick={onSubscribe} className="mt-2 w-full">Continuar para o checkout</Button>
     </div>
   );
 }
@@ -260,6 +266,7 @@ function RecommendedPlanResult({
   googleEmails,
   recommended,
   onEdit,
+  onSubscribe,
 }: {
   product: Product;
   networks: Network[];
@@ -268,6 +275,7 @@ function RecommendedPlanResult({
   googleEmails: number;
   recommended: number;
   onEdit: (step: CalculatorStep) => void;
+  onSubscribe: SubscribeHandler;
 }) {
   const tier = networkTier(networks.length);
   const selectedPrices = PRICES[product][tier];
@@ -287,9 +295,9 @@ function RecommendedPlanResult({
         <p className="mt-2 max-w-none text-sm text-gray-300">{PRODUCT_DESCRIPTIONS[product][recommended]} A configuração abaixo já considera o seu volume, as redes escolhidas e os limites informados.</p>
 
         <div className="mt-5 grid gap-3 lg:grid-cols-3 lg:gap-4">
-          <ResultPriceCard label="Mensal" price={selectedPrices.monthly[recommended]} />
-          <ResultPriceCard label="Semestral" installment="6x" price={selectedPrices.semiannual[recommended]} cashPrice={selectedPrices.semiannualCash[recommended]} savings={semiannualSavings} />
-          <ResultPriceCard label="Anual" installment="12x" price={selectedPrices.annual[recommended]} cashPrice={selectedPrices.annualCash[recommended]} savings={annualSavings} featured />
+          <ResultPriceCard label="Mensal" price={selectedPrices.monthly[recommended]} onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "monthly")} />
+          <ResultPriceCard label="Semestral" installment="6x" price={selectedPrices.semiannual[recommended]} cashPrice={selectedPrices.semiannualCash[recommended]} savings={semiannualSavings} onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "semiannual")} />
+          <ResultPriceCard label="Anual" installment="12x" price={selectedPrices.annual[recommended]} cashPrice={selectedPrices.annualCash[recommended]} savings={annualSavings} featured onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "annual")} />
         </div>
 
         <p className="mt-3 text-center text-xs text-brand-primary">Economia calculada sobre o pagamento mensal. Valores sujeitos a reajuste.</p>
@@ -461,7 +469,7 @@ function CalculatorQuestion({
   );
 }
 
-function PlanCalculator() {
+function PlanCalculator({ onSubscribe }: { onSubscribe: SubscribeHandler }) {
   const [product, setProduct] = useState<Product>("hub");
   const [networks, setNetworks] = useState<Network[]>([]);
   const [volume, setVolume] = useState<number | null>(null);
@@ -527,7 +535,7 @@ function PlanCalculator() {
           </div>
 
           {activeStep === "result" && volume !== null ? (
-            <RecommendedPlanResult product={product} networks={networks} volume={volume} accounts={accounts} googleEmails={googleEmails} recommended={recommended} onEdit={goToStep} />
+            <RecommendedPlanResult product={product} networks={networks} volume={volume} accounts={accounts} googleEmails={googleEmails} recommended={recommended} onEdit={goToStep} onSubscribe={onSubscribe} />
           ) : (
             <div className="flex min-h-72 flex-col justify-between">
               <div>
@@ -813,7 +821,7 @@ function PricingCardDetails({ product, index, networkCount, tier }: { product: P
   );
 }
 
-function PricingCards() {
+function PricingCards({ onSubscribe }: { onSubscribe: SubscribeHandler }) {
   const [product, setProduct] = useState<Product>("hub");
   const [billing, setBilling] = useState<Billing>("annual");
   const [networkCount, setNetworkCount] = useState<1 | 2 | 6>(1);
@@ -940,7 +948,7 @@ function PricingCards() {
 
                 <PricingCardDetails product={product} index={index} networkCount={networkCount} tier={tier} />
                 <div className="flex-1" />
-                <Button type="button" variant={featured ? "default" : "outline"} size="lg" disabled title="O link de checkout será configurado na próxima etapa" className={cn("mt-6 w-full disabled:opacity-100", unlimited && "border-emerald-500 bg-emerald-500 text-black")}>Assinar {name}</Button>
+                <Button type="button" variant={featured ? "default" : "outline"} size="lg" onClick={() => onSubscribe(product, name, billing)} className={cn("mt-6 w-full", unlimited && "border-emerald-500 bg-emerald-500 text-black hover:bg-emerald-400")}>Assinar {name}</Button>
                 <p className="mt-3 text-center text-xs text-gray-500">{billing === "annual" ? "12x sem juros ou à vista com desconto" : billing === "semiannual" ? "6x sem juros ou à vista com desconto" : "Cobrança mensal"}</p>
               </article>
             );
@@ -951,18 +959,33 @@ function PricingCards() {
             <button key={name} type="button" aria-label={`Ver plano ${name}`} aria-current={activeCard === index ? "true" : undefined} onClick={() => scrollToCard(index)} className={cn("h-2.5 rounded-full transition-[width,background-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-[#080808]", activeCard === index ? "w-8 bg-brand-primary" : "w-2.5 bg-white/25 hover:bg-white/40")} />
           ))}
         </div>
-        <p className="mt-6 text-center text-xs text-[#777]">Os links de contratação serão conectados após a aprovação desta nova estrutura.</p>
       </div>
     </section>
   );
 }
 
 export default function PlansExperience() {
+  const [selectedSubscription, setSelectedSubscription] = useState<SubscriptionSelection | null>(null);
+
+  const handleSubscribe: SubscribeHandler = (product, plan, billing) => {
+    const billingLabel = { monthly: "Mensal", semiannual: "Semestral", annual: "Anual" }[billing];
+    setSelectedSubscription({
+      name: `${PRODUCT_LABELS[product]} ${plan} — ${billingLabel}`,
+      checkoutUrl: "",
+    });
+  };
+
   return (
     <>
-      <PlanCalculator />
+      <PlanCalculator onSubscribe={handleSubscribe} />
       <ComparisonTable />
-      <PricingCards />
+      <PricingCards onSubscribe={handleSubscribe} />
+      <SubscriptionModal
+        isOpen={selectedSubscription !== null}
+        onClose={() => setSelectedSubscription(null)}
+        planName={selectedSubscription?.name ?? ""}
+        checkoutUrl={selectedSubscription?.checkoutUrl ?? ""}
+      />
     </>
   );
 }
