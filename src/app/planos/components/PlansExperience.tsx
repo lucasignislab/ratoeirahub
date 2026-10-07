@@ -124,6 +124,10 @@ const VOLUME_PLAN = [0, 0, 1, 2, 3, 3];
 
 const currency = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 });
 
+function cashSavingsPercent(installmentPrice: number, cashPrice: number, installments: number): number {
+  return Math.max(0, Math.round((1 - cashPrice / (installmentPrice * installments)) * 100));
+}
+
 function networkTier(count: number): NetworkTier {
   if (count <= 1) return "one";
   if (count === 2) return "two";
@@ -282,9 +286,8 @@ function RecommendedPlanResult({
 }) {
   const tier = networkTier(networks.length);
   const selectedPrices = PRICES[product][tier];
-  const monthlyTotal = selectedPrices.monthly[recommended];
-  const semiannualSavings = Math.max(0, Math.round((1 - selectedPrices.semiannualCash[recommended] / (monthlyTotal * 6)) * 100));
-  const annualSavings = Math.max(0, Math.round((1 - selectedPrices.annualCash[recommended] / (monthlyTotal * 12)) * 100));
+  const semiannualSavings = cashSavingsPercent(selectedPrices.semiannual[recommended], selectedPrices.semiannualCash[recommended], 6);
+  const annualSavings = cashSavingsPercent(selectedPrices.annual[recommended], selectedPrices.annualCash[recommended], 12);
   const summaryItems = getAnswerSummaryItems(product, networks, volume, accounts, googleEmails);
   const selectedAccountNetworks = networks.filter(supportsAdAccounts);
 
@@ -303,7 +306,7 @@ function RecommendedPlanResult({
           <ResultPriceCard label="Anual" installment="12x" price={selectedPrices.annual[recommended]} cashPrice={selectedPrices.annualCash[recommended]} savings={annualSavings} featured onSubscribe={() => onSubscribe(product, PLAN_NAMES[recommended], "annual", tier)} />
         </div>
 
-        <p className="mt-3 text-center text-xs text-brand-primary">Economia calculada sobre o pagamento mensal. Valores sujeitos a reajuste.</p>
+        <p className="mt-3 text-center text-xs text-brand-primary">Economia calculada entre o valor parcelado e o valor à vista. Valores sujeitos a reajuste.</p>
 
         <div className={cn("mt-5 grid gap-7 border-t border-white/10 pt-5", product === "hub" && "lg:grid-cols-2")}>
           {product !== "pages" && (
@@ -941,10 +944,9 @@ function PricingCards({ onSubscribe }: { onSubscribe: SubscribeHandler }) {
             const featured = index === 1;
             const unlimited = index === PLAN_NAMES.length - 1;
             const selectedPriceSet = PRICES[product][tier];
-            const monthlyTotal = selectedPriceSet.monthly[index];
             const cashPrice = billing === "annual" ? selectedPriceSet.annualCash[index] : billing === "semiannual" ? selectedPriceSet.semiannualCash[index] : undefined;
             const months = billing === "annual" ? 12 : billing === "semiannual" ? 6 : 1;
-            const savings = cashPrice ? Math.max(0, Math.round((1 - cashPrice / (monthlyTotal * months)) * 100)) : 0;
+            const savings = cashPrice ? cashSavingsPercent(prices[index], cashPrice, months) : 0;
             const installment = billing === "annual" ? "12x" : billing === "semiannual" ? "6x" : null;
             return (
               <article key={name} className={cn("relative flex min-w-full snap-start scroll-ml-0 flex-col rounded-card border border-white/[0.12] bg-[#111] p-5 shadow-card-resting transition-[transform,border-color,box-shadow] duration-200 hover:border-white/20 hover:shadow-card-hover md:min-w-0 md:snap-none md:hover:-translate-y-1 xl:min-h-[760px]", featured && "border-brand-primary/80 ring-1 ring-brand-primary/70", unlimited && "border-emerald-500/80 ring-1 ring-emerald-500/60")}>
