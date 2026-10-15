@@ -83,7 +83,7 @@ const CHECKOUT_LINKS = {
       annual: "https://go.checkout-ra.com/subscribe/a2bf4e7b-1da9-4e6d-99e6-201139f5ada5",
     },
     Starter: {
-      monthly: "https://go.checkout-ra.com/subscribe/a2bf55f0-8582-45c9-abc8-6c9a1b408a71",
+      monthly: "https://go.checkout-ra.com/subscribe/a2fd37ea-ef3d-432d-99cb-6f037bbc8716",
       semiannual: "https://go.checkout-ra.com/subscribe/a2bf55f0-9422-41dd-8cb4-90cf02c820f7",
       annual: "https://go.checkout-ra.com/subscribe/a2bf55f0-a156-44c3-b314-f23393baf7a6",
     },
